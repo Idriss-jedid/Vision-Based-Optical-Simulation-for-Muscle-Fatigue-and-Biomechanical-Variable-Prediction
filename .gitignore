@@ -1,0 +1,49 @@
+# ---- Python env & cache (jamais sur GitHub) ----
+.venv/
+.opencode/
+opencode-gui/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# ---- Vidéos : dataset Fit3D (tierce, licence) + synthétiques — trop lourd ----
+*.mp4
+*.avi
+*.mov
+**/videos/
+**/synthetic_videos/
+
+# ---- Pose2Sim intermédiaire : keypoints 2D par frame (énorme) ----
+**/pose/
+
+# ---- Géométrie meshes (standard OpenSim, lourd) ----
+*.stl
+*.vtp
+**/Geometry/
+
+# ---- Sorties OpenSim volumineuses (régénérables) ----
+*.sto
+*_controls.xml
+
+# ---- Données Fit3D tierces non utilisées (SMPL-X body fits, posing AIFit) ----
+**/smplx/
+**/gpp/
+
+# ---- Outils binaires téléchargés (LaTeX tectonic) ----
+Docs/.tools/
+*.exe
+*.zip
+
+# ---- Dossiers hors périmètre (on ne push QUE les livrables demandés) ----
+.opencode/
+opencode-gui/
+VDs/
+Pipeline_A_2D/
+Pose2Sim_3D/
+Vision_Pipeline/
+Docs/
+
+# ---- OS / IDE ----
+Thumbs.db
+.DS_Store
+*.log
