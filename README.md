@@ -49,12 +49,15 @@ rehabilitation, ergonomics, sports performance assessment, and remote healthcare
 ## 🎬 Demo
 
 <p align="center">
-  <video src="https://github.com/Idriss-jedid/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction/raw/main/media/demo.mp4" controls muted loop width="860" poster="media/banner.gif"></video>
+  <video src="https://idriss-jedid.github.io/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction/demo.mp4" controls muted loop width="860" poster="media/banner.gif"></video>
 </p>
 
-<p align="center"><em>2-minute walk-through: capture → RTMPose → 3D triangulation → OpenSim Arm26 → AI surrogate.
-If the player does not load, see the animated preview below or
-<a href="media/demo.mp4">open the video directly</a>.</em></p>
+<p align="center">
+  <b>▶ <a href="https://idriss-jedid.github.io/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction/">Live demo page</a></b>
+  &nbsp;·&nbsp; <a href="media/demo.mp4">download the video</a>
+</p>
+
+<p align="center"><em>2-minute walk-through: capture → RTMPose → 3D triangulation → OpenSim Arm26 → AI surrogate.</em></p>
 
 <p align="center"><img src="media/banner.gif" width="760" alt="RTMPose live overlay on four camera views"/></p>
 
