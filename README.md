@@ -61,7 +61,7 @@ rehabilitation, ergonomics, sports performance assessment, and remote healthcare
 
 <p align="center"><img src="media/banner.gif" width="760" alt="RTMPose live overlay on four camera views"/></p>
 
-<p align="center"><img src="batch/report_figs/pipeline_diagram_full.png" width="880" alt="Full pipeline"/></p>
+<p align="center"><img src="figures/pipeline_diagram_full.png" width="880" alt="Full pipeline"/></p>
 
 ---
 
@@ -145,7 +145,7 @@ activations, muscle forces, and muscle fatigue** — the *labels* for the learni
 
 The earlier the AI taps the pipeline, the less pre-processing it needs, at a small accuracy cost.
 On a held-out subject it reproduces torque (R² 0.90), activation (0.88), force (0.87) and fatigue
-(0.94). All result figures are in [`batch/report_figs/`](batch/report_figs).
+(0.94). All result figures are in [`figures/`](figures).
 
 ---
 
@@ -153,29 +153,31 @@ On a held-out subject it reproduces torque (R² 0.90), activation (0.88), force 
 
 ```
 .
-├── Code/                      # Core pipeline & biomechanics scripts
-│   ├── run_stage2_pipeline.py     #   vision .trc → Arm26 → ID / SO / 3CC
-│   ├── build_arm26_paper*.py      #   build / load the Arm26 model (2 kg curl)
-│   ├── run_id_so.py · run_fatigue_so.py · analyze_muscles_over_motion.py
-│   ├── train_ml.py                #   Approach A surrogate
-│   └── validate_*.py              #   EMG / moment-arm / endurance checks
-├── s04/code/                  # Batch processing, ML & figures
-│   ├── batch_all_subjects.py · batch_calib_all.py · build_calib_world.py
-│   ├── extract_labels_all.py      #   OpenSim labels for the 8 subjects
-│   ├── final_3d_model.py · build_3d_model.py   # Approach B (3D joints)
-│   ├── bench_tabular.py · bench_deep.py        # model benchmarks
-│   ├── make_*_fig.py · timing_compare.py · memory_compare.py
-├── batch/                     # Per-subject data + trained models + results
-│   ├── s03 … s11/pose2sim/        #   calibration .toml · 3D .trc · IK
-│   ├── s03 … s11/{motion,opensim} #   .mot motion · scaled .osim · ID/SO/3CC
-│   ├── model_final/  model_3d_final/  model_2d_final/   # 3 LightGBM surrogates
-│   ├── ml_dataset_*.csv           #   ML feature/label datasets (A, 3D, raw)
-│   ├── metrics_*.csv · MASTER_comparison.csv · timing_pipeline.csv
-│   └── report_figs/               #   all result figures
-├── Data/                      # Arm26 models + generated datasets
-│   └── arm26.osim · arm26_with_bucket.osim · …
-├── Model/                     # arm26_paper_loaded_brd_elbow_research.osim (+ build)
-├── Results/                   # ID / IK / Static-Optimization result tables
+├── src/
+│   ├── pipeline/              # Vision → biomechanics
+│   │   ├── run_stage2_pipeline.py   #   3D .trc → Arm26 → ID / SO / 3CC
+│   │   ├── build_arm26_model.py     #   build the loaded Arm26 model (2 kg curl)
+│   │   ├── scale_from_trc.py        #   subject-specific scaling
+│   │   ├── batch_all_subjects.py · batch_calib_all.py · build_calib_world.py
+│   │   ├── extract_labels_all.py    #   OpenSim labels for the 8 subjects
+│   │   └── run_id_so.py · run_fatigue_so.py
+│   ├── ml/                   # The three AI surrogates
+│   │   ├── train_approach_A.py      #   A · from .mot + .osim
+│   │   ├── train_approach_B_3d.py   #   B · from 3D joints
+│   │   ├── train_approach_C_2d.py   #   C · from 2D keypoints
+│   │   └── benchmarks_tabular.py · benchmarks_deep.py
+│   └── viz/                  # Figures + timing / memory analysis
+│       ├── make_pipeline_figure.py · make_timing_figures.py
+│       ├── make_timing_levels.py · make_resources_figure.py
+│       └── timing_compare.py · memory_compare.py
+├── models/                    # Trained surrogates + the Arm26 model
+│   ├── approach_A_mot_osim/ · approach_B_3d/ · approach_C_2d/   # LightGBM .joblib + cards
+│   └── arm26/                #   arm26_loaded.osim · arm26_base.osim · HOW_IT_WORKS.md
+├── dataset/                   # ML datasets + metrics
+│   ├── ml_dataset_A.csv · ml_dataset_3D.csv · ml_dataset_3D_RAW.csv
+│   └── metrics_*.csv · MASTER_comparison.csv · timing_pipeline.csv
+├── figures/                   # All result figures (pipeline, timing, XAI, per-muscle, …)
+├── media/                     # demo video + preview GIF
 └── media/                     # demo video + preview GIF
 ```
 
@@ -190,19 +192,19 @@ pip install opensim pose2sim lightgbm optuna shap scikit-learn pandas matplotlib
 
 # 2. download the Fit3D videos -> https://fit3d.imar.ro/fit3d
 # 3. vision → biomechanics labels (per subject)
-python Code/run_stage2_pipeline.py
-python s04/code/extract_labels_all.py
+python src/pipeline/run_stage2_pipeline.py
+python src/pipeline/extract_labels_all.py
 
 # 4. train a surrogate (Approach B, 3D joints) + benchmarks
-python s04/code/final_3d_model.py
-python s04/code/bench_tabular.py
-python s04/code/timing_compare.py && python s04/code/memory_compare.py
+python src/ml/train_approach_B_3d.py
+python src/ml/benchmarks_tabular.py
+python src/viz/timing_compare.py && python src/viz/memory_compare.py
 ```
 
 Using a trained model:
 ```python
 import joblib
-m = joblib.load("batch/model_3d_final/lgbm_3d_vision.joblib")
+m = joblib.load("models/approach_B_3d/lgbm_3d_vision.joblib")
 y = m["y_scaler"].inverse_transform(m["model"].predict(m["x_scaler"].transform(X)))
 # y -> [elbow torque, 4× activation, 4× force, 4× fatigue]
 ```
@@ -211,12 +213,13 @@ y = m["y_scaler"].inverse_transform(m["model"].predict(m["x_scaler"].transform(X
 
 ## 📦 What is and isn't in the repo
 
-**Included** — all code, the three trained models, the ML datasets, the per-subject Pose2Sim 3D
-(`.trc`), motions (`.mot`), calibrations (`.toml`), scaled Arm26 models and OpenSim outputs, all metrics
-and result figures, and the demo video.
+**Included** — the essential code (`src/`), the three trained surrogates and the Arm26 model
+(`models/`), the ML datasets and metrics (`dataset/`), all result figures (`figures/`) and the demo
+video (`media/`).
 
-**Not included (regenerable / licensed / heavy)** — the raw camera videos and per-frame 2D keypoint
-JSON (regenerated by RTMPose from the **Fit3D** videos), and the standard OpenSim `Geometry/` meshes.
+**Not included** — raw camera videos and per-frame 2D keypoints (regenerated by RTMPose from the
+**Fit3D** videos), the OpenSim `Geometry/` meshes, and exploratory / one-off scripts and intermediate
+per-subject outputs kept out to keep the repository lean.
 
 ---
 
