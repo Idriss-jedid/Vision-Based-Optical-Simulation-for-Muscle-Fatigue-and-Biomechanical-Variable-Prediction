@@ -19,10 +19,11 @@ import toml
 HERE = os.path.dirname(os.path.abspath(__file__))
 S04 = os.path.dirname(HERE)
 ROOT = os.path.dirname(S04)
-SRC = r"D:\Download\fit3d_train\train"
+SRC = r"D:\Download\fit3d\fit3d_train\train"
 BATCH = os.path.join(ROOT, "batch")
 EXERCISE = "dumbbell_biceps_curls"
-SUBJECTS = ["s03", "s04", "s05", "s07", "s08", "s09", "s10", "s11"]
+import sys
+SUBJECTS = sys.argv[1:] if len(sys.argv) > 1 else ["s03", "s04", "s05", "s07", "s08", "s09", "s10", "s11"]
 CAMS = ["50591643", "58860488", "60457274", "65906101"]
 SIZE = (900, 900); FPS = 50
 DEMO = r"D:/Download/pose2sim_env/Lib/site-packages/Pose2Sim/Demo_SinglePerson/Config.toml"

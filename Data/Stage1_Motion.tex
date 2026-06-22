@@ -1,0 +1,288 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\dg}{^{\circ}}
+
+\title{Stage 1 --- Minimum-Jerk Motion Generation}
+\author{Vision-Based Optical Simulation}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent
+This document describes how the Stage-1 elbow-curl \emph{motion} is generated:
+a minimum-jerk baseline with a progressive, physiologically motivated fatigue
+perturbation.
+
+%==============================================================
+\section{Scientific Goal}
+
+The goal is to generate physiologically plausible repetitive elbow-curl motion
+\emph{without} motion capture. Instead of recording a person, the elbow angle is
+generated from a motor-control law: \textbf{minimum jerk}. This gives a clean,
+human-like baseline. Controlled fatigue effects are then added so the motion
+becomes slower, smaller in range, shakier, and more asymmetric over repetitions.
+
+\[
+\text{minimum-jerk law} \;\rightarrow\; \text{clean elbow curl}
+\;\rightarrow\; \text{progressive fatigue perturbation}.
+\]
+
+\paragraph{Provenance.} \textit{Inspired by} Flash \& Hogan (1985) and Hogan
+(1984) --- the choice of minimum jerk as the model of natural, unconstrained
+human movement is theirs. The idea of layering progressive fatigue degradation
+on that baseline is \textit{grounded in} the repetitive-task fatigue literature
+(Potvin 1997; Savin et al.\ 2021); combining the two into a synthetic generator
+is this project's own design.
+
+%==============================================================
+\section{Minimum-Jerk Motion}
+
+For one movement from $q_{\text{start}}$ to $q_{\text{end}}$ over duration $T$,
+the normalized time is
+\[
+s = \frac{\tau}{T}, \qquad s \in [0,1],
+\]
+and the elbow angle follows the fifth-order minimum-jerk polynomial
+\begin{equation}
+q(\tau) = q_{\text{start}} + \bigl(q_{\text{end}} - q_{\text{start}}\bigr)
+\left( 10\,s^{3} - 15\,s^{4} + 6\,s^{5} \right).
+\end{equation}
+
+This polynomial is used because it guarantees the properties in
+Table~\ref{tab:mj-props}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Property} & \textbf{Meaning} \\
+\midrule
+zero velocity at endpoints & no sudden start/stop \\
+zero acceleration at endpoints & no artificial acceleration spike \\
+single bell-shaped velocity profile & close to observed human reaching/curl motion \\
+smooth position curve & suitable baseline for OpenSim kinematics \\
+\bottomrule
+\end{tabular}
+\caption{Properties guaranteed by the fifth-order minimum-jerk polynomial.}
+\label{tab:mj-props}
+\end{table}
+
+The analytic derivatives are
+\begin{align}
+\dot q(\tau)  &= \bigl(q_{\text{end}} - q_{\text{start}}\bigr)
+\,\frac{30\,s^{2} - 60\,s^{3} + 30\,s^{4}}{T}, \\[4pt]
+\ddot q(\tau) &= \bigl(q_{\text{end}} - q_{\text{start}}\bigr)
+\,\frac{60\,s - 180\,s^{2} + 120\,s^{3}}{T^{2}}.
+\end{align}
+
+\paragraph{Consistency note.} After tremor and drift are added (Section~\ref{sec:fatigue}),
+these analytic derivatives are no longer the derivatives of the final written
+signal. The generator therefore computes velocity and acceleration by finite
+differences of the final elbow angle that is actually written to the motion file,
+so the kinematics remain self-consistent.
+
+\paragraph{Provenance.} \textit{Directly from} Flash \& Hogan (1985): the
+fifth-order polynomial, its zero velocity/acceleration at the endpoints, and the
+bell-shaped velocity profile are their result; Hogan (1984) applies it to
+single-joint (elbow) movement. The analytic derivatives follow by
+differentiation. The finite-difference \emph{consistency} step (recomputing
+$\dot q,\ddot q$ from the written signal after perturbation) is this project's
+implementation choice, not from a paper.
+
+%==============================================================
+\section{One Repetition}
+
+One elbow-curl repetition is built from four segments:
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Segment} & \textbf{Description} \\
+\midrule
+$20\dg \rightarrow 120\dg$ & flexion / concentric phase \\
+$120\dg$ hold & top pause \\
+$120\dg \rightarrow 20\dg$ & extension / eccentric phase \\
+$20\dg$ hold & bottom pause \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The default canonical settings are listed in Table~\ref{tab:params}. The
+$20\dg$--$120\dg$ range avoids full extension and gives a realistic
+controlled curl range for the simplified arm26 model.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Default} \\
+\midrule
+sampling rate & \SI{100}{\hertz} \\
+start angle $q_0$ & $20\dg$ \\
+fresh target $q_f$ & $120\dg$ \\
+shoulder angle & $20\dg$ (fixed) \\
+flexion duration & \SI{1.5}{\second} \\
+extension duration & \SI{1.5}{\second} \\
+top / bottom pause & \SI{0.2}{\second} \\
+\bottomrule
+\end{tabular}
+\caption{Canonical motion parameters.}
+\label{tab:params}
+\end{table}
+
+\paragraph{Provenance.} \textit{Project implementation.} The four-segment
+concentric/eccentric structure with top/bottom pauses and the chosen timings are
+our design. The $20\dg$--$120\dg$ range is \textit{informed by} controlled-curl
+ROM in the arm26 literature (e.g.\ Attarieh et al.\ 2025 used $10\dg$--$140\dg$)
+and chosen to avoid full extension; the exact values are our setting.
+
+%==============================================================
+\section{Fatigue Model}
+\label{sec:fatigue}
+
+Fatigue is represented by a normalized level $f \in [0,1]$. The generator uses a
+\textbf{saturating} fatigue curve (not a straight line),
+\begin{equation}
+f(x) = \frac{1 - e^{-r x}}{1 - e^{-r}},
+\end{equation}
+where $x$ is repetition progress from $0$ to $1$ and the fatigue rate is
+$r = 1.2$. This makes the decline less front-loaded over short protocols while
+still allowing faster or slower fatigue.
+
+The fatigue level $f$ drives five effects (Table~\ref{tab:fatigue}).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Effect} & \textbf{Parameter} & \textbf{What happens} \\
+\midrule
+slower movement & \texttt{dur\_gain} & movement duration increases up to \SI{40}{\percent} \\
+reduced range of motion & \texttt{rom\_loss} & target angle drops from $120\dg$ toward $100\dg$ \\
+timing asymmetry & \texttt{asym} & flexion slows, extension relatively faster \\
+tremor / less smoothness & \texttt{tremor\_amp} & \SIrange{6}{12}{\hertz} band-limited tremor added \\
+endpoint drift & \texttt{drift\_amp} & slow \SIrange{0.1}{0.5}{\hertz} turnaround variability \\
+\bottomrule
+\end{tabular}
+\caption{Fatigue effects controlled by $f$.}
+\label{tab:fatigue}
+\end{table}
+
+\noindent
+The tremor and drift perturbations are \textbf{band-limited sums of sinusoids},
+not white noise. This matters because white noise would create unrealistic jerk
+and unstable finite-difference derivatives. The tremor occupies a physiological
+$\SIrange{6}{12}{\hertz}$ band; the slow drift occupies $\SIrange{0.1}{0.5}{\hertz}$
+and produces realistic turnaround variability.
+
+\paragraph{Optional motion variants.}
+Two settings shape the high-frequency content without changing the underlying
+curl: \texttt{clip\_to\_rom} bounds the final angle to $[q_0, q_f]$, and
+\texttt{lowpass\_hz} applies a low-pass filter to produce a lower-noise,
+inverse-dynamics-safe motion. The default keeps the full physiological
+variability; the velocity and acceleration are always recomputed from the final
+written angle, including any clipping or filtering.
+
+\paragraph{Provenance.} The \emph{saturating} fatigue curve is \textit{inspired
+by} the three-compartment fatigue model of Xia \& Frey-Law (2008) and Frey-Law
+et al.\ (2012) (accumulation toward a plateau). The five degradation effects are
+\textit{taken from} the repetitive-task fatigue literature: slowing and reduced
+peak velocity / ROM (Potvin 1997; Potvin \& Bent), timing asymmetry and
+movement-variability / endpoint drift (Savin et al.\ 2021; Yang et al.\ 2018;
+Sheikhhoseini et al.\ 2025). The \emph{band-limited} (sum-of-sinusoids, not white)
+implementation of tremor/drift and the \texttt{clip\_to\_rom} / \texttt{lowpass\_hz}
+options are this project's implementation choices, not from a specific paper.
+
+%==============================================================
+\section{Quality-Control Validation}
+
+Each generated motion is validated against minimum-jerk theory and broad
+literature expectations. The checks are:
+\begin{itemize}\itemsep2pt
+  \item fresh peak velocity close to the minimum-jerk prediction
+        $\dot q_{\max} = 1.875\,(q_f - q_0)/T$;
+  \item fresh velocity profile approximately symmetric (time-to-peak $\approx \SI{50}{\percent}$);
+  \item fresh range of motion matches the commanded ROM;
+  \item fatigue causes peak velocity to decrease over repetitions;
+  \item fatigue causes range of motion to decrease over repetitions;
+  \item fatigue causes movement duration to increase over repetitions;
+  \item peak elbow velocity remains in a plausible human range ($<300\,\dg\,\mathrm{s}^{-1}$).
+\end{itemize}
+
+The fatigue trends are tested as least-squares regression \emph{slopes} across all
+repetitions, not by comparing only the first and last repetition. This is more
+robust because endpoint drift is deliberate and can mask a small difference in a
+two-point comparison.
+
+\paragraph{Provenance.} The peak-to-average velocity ratio $1.875$ is the
+minimum-jerk value confirmed empirically by Flash \& Hogan (1985). The
+fatigue-trend expectations (peak velocity and ROM decrease, duration increases)
+are \textit{from} the fatigue literature (Potvin 1997; Potvin \& Bent; Savin et
+al.\ 2021). The regression-slope test procedure and the numeric thresholds are
+this project's implementation.
+
+%==============================================================
+\section{What Changed From the Original Motion}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Feature} & \textbf{Original motion} & \textbf{Improved generator} \\
+\midrule
+elbow ROM   & $0\dg \rightarrow 80\dg$ & $20\dg \rightarrow 120\dg$, declining with fatigue \\
+shoulder    & $0\dg$ & $20\dg$ fixed stabilization \\
+movement model & minimum jerk only & minimum jerk $+$ fatigue perturbation \\
+fatigue     & none & slower, smaller ROM, asymmetric, tremor, drift \\
+noise       & none & band-limited tremor/drift (not white noise) \\
+derivatives & not provided & finite differences of the written signal \\
+validation  & manual inspection & automatic QC report \\
+\bottomrule
+\end{tabular}
+\caption{Changes from the original motion to the improved minimum-jerk generator.}
+\end{table}
+
+\paragraph{Provenance.} \textit{Project engineering} --- this is a comparison of
+the improved generator against the original motion file produced earlier in the
+project, not content drawn from a paper.
+
+%==============================================================
+\section*{References}
+\begin{description}\itemsep2pt
+\item[Hogan (1984).] An organizing principle for a class of voluntary movements.
+  \emph{Journal of Neuroscience}. Theoretical basis for smooth, jerk-minimizing movement.
+\item[Flash \& Hogan (1985).] The coordination of arm movements: an experimentally
+  confirmed mathematical model. \emph{Journal of Neuroscience}. Source of the
+  fifth-order minimum-jerk trajectory and bell-shaped velocity profile.
+\item[Xia \& Frey-Law (2008).] A theoretical approach for modeling peripheral
+  muscle fatigue and recovery. \emph{Journal of Biomechanics}. Inspiration for a
+  saturating fatigue state.
+\item[Frey-Law \& Avin (2010).] Endurance time is joint-specific. \emph{Ergonomics}.
+  Justifies variability in fatigue resistance.
+\item[Frey-Law, Looft \& Heitsman (2012).] A three-compartment muscle fatigue model.
+  \emph{Journal of Biomechanics}. Reference for fatigue accumulation/plateau behavior.
+\item[Potvin (1997).] Effects of muscle kinematics on surface EMG amplitude and
+  frequency during fatiguing dynamic contractions. \emph{J.\ Applied Physiology}.
+  Dynamic fatigue signatures during elbow flexion--extension.
+\item[Savin et al.\ (2021).] Movement variability patterns during a repetitive
+  pointing task until exhaustion. \emph{Applied Ergonomics}. Basis for fatigue-related
+  endpoint drift / movement variability.
+\item[Yang et al.\ (2018).] Changes in movement variability and task performance
+  during a fatiguing repetitive pointing task. \emph{Journal of Biomechanics}.
+  Additional support for fatigue-related movement-variability changes.
+\item[Attarieh et al.\ (2025).] Comparison of shoulder positions in elbow-flexion
+  resistance training (preacher vs.\ Bayesian cable curls). \emph{European Journal
+  of Sport Science}. Source for the controlled-curl elbow ROM ($10\dg$--$140\dg$)
+  used to inform the chosen $20\dg$--$120\dg$ range.
+\item[Sheikhhoseini et al.\ (2025).] Biomechanical coordination and variability after
+  repetitive movement fatigue. \emph{Scientific Reports}. Post-fatigue movement-variability changes.
+\end{description}
+
+\end{document}

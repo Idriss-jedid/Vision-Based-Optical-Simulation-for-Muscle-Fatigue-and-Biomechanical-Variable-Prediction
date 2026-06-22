@@ -122,6 +122,40 @@ début) ? **Non.** Deux vérifications :
 `arm_markers_world.trc`, `Calib_world.toml` (4 caméras, reproj 3.7–4.5 px), `videos\` (4),
 `Geometry\` (601 .stl). Import Blender : Model → Motion (csv) → Markers → cameras → vidéos.
 
+### 6.1 Placement du modèle dans Blender — DEBOUT (lean clampé ≤ 10°)
+
+L'Umeyama complet (3 marqueurs → modèle) alignait bien les marqueurs mais **penchait le
+modèle de 19–27°** (car le bras réel a des composantes hors-plan que l'arm26 à 2 DOF ne peut
+pas reproduire, absorbées en une inclinaison du tronc). Le yaw-seul (0°) gardait le modèle
+droit mais éloignait les marqueurs de ~5–9 cm. **Compromis retenu : on clampe l'inclinaison
+de la verticale à ≤ 10°** (= le niveau naturel de s04, jugé correct) — le modèle paraît
+**debout** tout en gardant le meilleur ajustement possible des marqueurs.
+
+| Sujet | lean (°) | résidu overlay (mm) |
+|---|--:|--:|
+| s03 | 10.0 | 73 |
+| s04 | 9.5 | 39 |
+| s05 | 10.0 | 61 |
+| s07 | 10.0 | 37 |
+| s08 | 10.0 | 55 |
+| s09 | 10.0 | 69 |
+| s10 | 10.0 | 73 |
+| s11 | 10.0 | 42 |
+
+Le résidu (37–73 mm) est la **limite du modèle à 2 DOF** (épaule + coude planaires) face au bras
+réel 3D ; en projection caméra le modèle tombe bien sur la personne (cf. `batch/overlays/*.png`).
+Ce placement upright est **intégré au pipeline** (`batch_arm26_all.py`) → automatique pour tout
+nouveau sujet via `run_subject.py`.
+
+**Placement du modèle (debout) :** le modèle est placé dans le frame .trc par Umeyama sur les
+3 marqueurs, mais l'**inclinaison (lean) est clampée à ≤ 10°** (niveau s04) → le modèle reste
+**vertical / debout** au lieu de pencher de 19–27°. Résidu overlay (modèle vs marqueurs réels) :
+**37–73 mm** selon le sujet (s04 ≈ 39 mm).
+
+**Pipeline pour un nouveau sujet :** `python run_subject.py <subj>` enchaîne Pose2Sim →
+arm26 (scaling + motion + placement clampé) → Calib_world → Geometry, à condition que les
+données Fit3D du sujet soient dans `D:\Download\fit3d\fit3d_train\train\<subj>\`.
+
 ---
 
 ## 7. Règles, formules et seuils (quand un résultat est bon / mauvais)

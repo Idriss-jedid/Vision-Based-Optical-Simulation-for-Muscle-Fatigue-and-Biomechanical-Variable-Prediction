@@ -1,0 +1,817 @@
+﻿<!-- Extracted Thelen2003Muscle blocks from arm26_paper_loaded.osim -->
+<Muscles>
+<Thelen2003Muscle name="TRIlong">
+					<!--Flag indicating whether the force is applied or not. If true the forceis applied to the MultibodySystem otherwise the force is not applied.NOTE: Prior to OpenSim 4.0, this behavior was controlled by the 'isDisabled' property, where 'true' meant that force was not being applied. Thus, if 'isDisabled' is true, then 'appliesForce` is false.-->
+					<appliesForce>true</appliesForce>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="TRIlong-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/base</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.053650000000000003 -0.013729999999999999 0.14723</location>
+								</PathPoint>
+								<PathPoint name="TRIlong-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.027140000000000001 -0.11441 -0.0066400000000000001</location>
+								</PathPoint>
+								<PathPoint name="TRIlong-P3">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.03184 -0.22636999999999999 -0.01217</location>
+								</PathPoint>
+								<PathPoint name="TRIlong-P4">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.017430000000000001 -0.26756999999999997 -0.01208</location>
+								</PathPoint>
+								<PathPoint name="TRIlong-P5">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.021899999999999999 0.010460000000000001 -0.00077999999999999999</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+						<!--The wrap objects that are associated with this path-->
+						<PathWrapSet>
+							<objects>
+								<PathWrap name="TRIlong-wrap-cylinder1">
+									<!--A WrapObject that this PathWrap interacts with.-->
+									<wrap_object>TRI</wrap_object>
+									<!--The wrapping method used to solve the path around the wrap object.-->
+									<method>hybrid</method>
+									<!--The range of indices to use to compute the path over the wrap object.-->
+									<range>-1 -1</range>
+								</PathWrap>
+								<PathWrap name="TRIlong-wrap-ellipsoid">
+									<!--A WrapObject that this PathWrap interacts with.-->
+									<wrap_object>TRIlonghh</wrap_object>
+									<!--The wrapping method used to solve the path around the wrap object.-->
+									<method>hybrid</method>
+									<!--The range of indices to use to compute the path over the wrap object.-->
+									<range>-1 -1</range>
+								</PathWrap>
+								<PathWrap name="TRIlong-wrap-cylinder2">
+									<!--A WrapObject that this PathWrap interacts with.-->
+									<wrap_object>TRIlongglen</wrap_object>
+									<!--The wrapping method used to solve the path around the wrap object.-->
+									<method>hybrid</method>
+									<!--The range of indices to use to compute the path over the wrap object.-->
+									<range>-1 -1</range>
+								</PathWrap>
+							</objects>
+							<groups />
+						</PathWrapSet>
+					</GeometryPath>
+					<!--The maximum force this actuator can produce.-->
+					<optimal_force>1</optimal_force>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>798.51999999999998</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.13400000000000001</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.14299999999999999</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0.20943951</pennation_angle_at_optimal>
+					<!--Maximum contraction velocity of the fibers, in optimal fiberlengths/second-->
+					<max_contraction_velocity>10</max_contraction_velocity>
+					<!--tendon strain at maximum isometric muscle force-->
+					<FmaxTendonStrain>0.033000000000000002</FmaxTendonStrain>
+					<!--passive muscle strain at maximum isometric muscle force-->
+					<FmaxMuscleStrain>0.59999999999999998</FmaxMuscleStrain>
+					<!--shape factor for Gaussian active muscle force-length relationship-->
+					<KshapeActive>0.5</KshapeActive>
+					<!--exponential shape factor for passive force-length relationship-->
+					<KshapePassive>4</KshapePassive>
+					<!--force-velocity shape factor-->
+					<Af>0.29999999999999999</Af>
+					<!--maximum normalized lengthening force-->
+					<Flen>1.8</Flen>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.01</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.040000000000000001</deactivation_time_constant>
+				</Thelen2003Muscle>
+
+<Thelen2003Muscle name="TRIlat">
+					<!--Flag indicating whether the force is applied or not. If true the forceis applied to the MultibodySystem otherwise the force is not applied.NOTE: Prior to OpenSim 4.0, this behavior was controlled by the 'isDisabled' property, where 'true' meant that force was not being applied. Thus, if 'isDisabled' is true, then 'appliesForce` is false.-->
+					<appliesForce>true</appliesForce>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="TRIlat-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.0059899999999999997 -0.12645999999999999 0.00428</location>
+								</PathPoint>
+								<PathPoint name="TRIlat-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.023439999999999999 -0.14527999999999999 0.0092800000000000001</location>
+								</PathPoint>
+								<PathPoint name="TRIlat-P3">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.03184 -0.22636999999999999 -0.01217</location>
+								</PathPoint>
+								<PathPoint name="TRIlat-P4">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.017430000000000001 -0.26756999999999997 -0.01208</location>
+								</PathPoint>
+								<PathPoint name="TRIlat-P5">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.021899999999999999 0.010460000000000001 -0.00077999999999999999</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+						<!--The wrap objects that are associated with this path-->
+						<PathWrapSet>
+							<objects>
+								<PathWrap name="pathwrap">
+									<!--A WrapObject that this PathWrap interacts with.-->
+									<wrap_object>TRI</wrap_object>
+									<!--The wrapping method used to solve the path around the wrap object.-->
+									<method>hybrid</method>
+									<!--The range of indices to use to compute the path over the wrap object.-->
+									<range>-1 -1</range>
+								</PathWrap>
+							</objects>
+							<groups />
+						</PathWrapSet>
+					</GeometryPath>
+					<!--The maximum force this actuator can produce.-->
+					<optimal_force>1</optimal_force>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>624.29999999999995</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.1138</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.098000000000000004</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0.15707963</pennation_angle_at_optimal>
+					<!--Maximum contraction velocity of the fibers, in optimal fiberlengths/second-->
+					<max_contraction_velocity>10</max_contraction_velocity>
+					<!--tendon strain at maximum isometric muscle force-->
+					<FmaxTendonStrain>0.033000000000000002</FmaxTendonStrain>
+					<!--passive muscle strain at maximum isometric muscle force-->
+					<FmaxMuscleStrain>0.59999999999999998</FmaxMuscleStrain>
+					<!--shape factor for Gaussian active muscle force-length relationship-->
+					<KshapeActive>0.5</KshapeActive>
+					<!--exponential shape factor for passive force-length relationship-->
+					<KshapePassive>4</KshapePassive>
+					<!--force-velocity shape factor-->
+					<Af>0.29999999999999999</Af>
+					<!--maximum normalized lengthening force-->
+					<Flen>1.8</Flen>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.01</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.040000000000000001</deactivation_time_constant>
+				</Thelen2003Muscle>
+
+<Thelen2003Muscle name="TRImed">
+					<!--Flag indicating whether the force is applied or not. If true the forceis applied to the MultibodySystem otherwise the force is not applied.NOTE: Prior to OpenSim 4.0, this behavior was controlled by the 'isDisabled' property, where 'true' meant that force was not being applied. Thus, if 'isDisabled' is true, then 'appliesForce` is false.-->
+					<appliesForce>true</appliesForce>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="TRImed-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.0083800000000000003 -0.13694999999999999 -0.0090600000000000003</location>
+								</PathPoint>
+								<PathPoint name="TRImed-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.026009999999999998 -0.15139 -0.010800000000000001</location>
+								</PathPoint>
+								<PathPoint name="TRImed-P3">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.03184 -0.22636999999999999 -0.01217</location>
+								</PathPoint>
+								<PathPoint name="TRImed-P4">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.017430000000000001 -0.26756999999999997 -0.01208</location>
+								</PathPoint>
+								<PathPoint name="TRImed-P5">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.021899999999999999 0.010460000000000001 -0.00077999999999999999</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+						<!--The wrap objects that are associated with this path-->
+						<PathWrapSet>
+							<objects>
+								<PathWrap name="pathwrap">
+									<!--A WrapObject that this PathWrap interacts with.-->
+									<wrap_object>TRI</wrap_object>
+									<!--The wrapping method used to solve the path around the wrap object.-->
+									<method>hybrid</method>
+									<!--The range of indices to use to compute the path over the wrap object.-->
+									<range>-1 -1</range>
+								</PathWrap>
+							</objects>
+							<groups />
+						</PathWrapSet>
+					</GeometryPath>
+					<!--The maximum force this actuator can produce.-->
+					<optimal_force>1</optimal_force>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>624.29999999999995</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.1138</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.090800000000000006</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0.15707963</pennation_angle_at_optimal>
+					<!--Maximum contraction velocity of the fibers, in optimal fiberlengths/second-->
+					<max_contraction_velocity>10</max_contraction_velocity>
+					<!--tendon strain at maximum isometric muscle force-->
+					<FmaxTendonStrain>0.033000000000000002</FmaxTendonStrain>
+					<!--passive muscle strain at maximum isometric muscle force-->
+					<FmaxMuscleStrain>0.59999999999999998</FmaxMuscleStrain>
+					<!--shape factor for Gaussian active muscle force-length relationship-->
+					<KshapeActive>0.5</KshapeActive>
+					<!--exponential shape factor for passive force-length relationship-->
+					<KshapePassive>4</KshapePassive>
+					<!--force-velocity shape factor-->
+					<Af>0.29999999999999999</Af>
+					<!--maximum normalized lengthening force-->
+					<Flen>1.8</Flen>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.01</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.040000000000000001</deactivation_time_constant>
+				</Thelen2003Muscle>
+
+<Thelen2003Muscle name="BIClong">
+					<!--Flag indicating whether the force is applied or not. If true the forceis applied to the MultibodySystem otherwise the force is not applied.NOTE: Prior to OpenSim 4.0, this behavior was controlled by the 'isDisabled' property, where 'true' meant that force was not being applied. Thus, if 'isDisabled' is true, then 'appliesForce` is false.-->
+					<appliesForce>true</appliesForce>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="BIClong-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/base</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.039234999999999999 0.00347 0.14795</location>
+								</PathPoint>
+								<PathPoint name="BIClong-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/base</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.028944999999999999 0.01391 0.15639</location>
+								</PathPoint>
+								<PathPoint name="BIClong-P3">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.021309999999999999 0.017930000000000001 0.010279999999999999</location>
+								</PathPoint>
+								<PathPoint name="BIClong-P4">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.023779999999999999 -0.00511 0.01201</location>
+								</PathPoint>
+								<PathPoint name="BIClong-P5">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.01345 -0.02827 0.0013600000000000001</location>
+								</PathPoint>
+								<PathPoint name="BIClong-P6">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.01068 -0.077359999999999998 -0.00165</location>
+								</PathPoint>
+								<PathPoint name="BIClong-P7">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.01703 -0.12125 0.00024000000000000001</location>
+								</PathPoint>
+								<PathPoint name="BIClong-P8">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.022800000000000001 -0.1754 -0.0063</location>
+								</PathPoint>
+								<PathPoint name="BIClong-P9">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.0075100000000000002 -0.048390000000000002 0.02179</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+						<!--The wrap objects that are associated with this path-->
+						<PathWrapSet>
+							<objects>
+								<PathWrap name="pathwrap">
+									<!--A WrapObject that this PathWrap interacts with.-->
+									<wrap_object>BIClonghh</wrap_object>
+									<!--The wrapping method used to solve the path around the wrap object.-->
+									<method>hybrid</method>
+									<!--The range of indices to use to compute the path over the wrap object.-->
+									<range>2 3</range>
+								</PathWrap>
+							</objects>
+							<groups />
+						</PathWrapSet>
+					</GeometryPath>
+					<!--The maximum force this actuator can produce.-->
+					<optimal_force>1</optimal_force>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>624.29999999999995</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.1157</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.27229999999999999</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0</pennation_angle_at_optimal>
+					<!--Maximum contraction velocity of the fibers, in optimal fiberlengths/second-->
+					<max_contraction_velocity>10</max_contraction_velocity>
+					<!--tendon strain at maximum isometric muscle force-->
+					<FmaxTendonStrain>0.033000000000000002</FmaxTendonStrain>
+					<!--passive muscle strain at maximum isometric muscle force-->
+					<FmaxMuscleStrain>0.59999999999999998</FmaxMuscleStrain>
+					<!--shape factor for Gaussian active muscle force-length relationship-->
+					<KshapeActive>0.5</KshapeActive>
+					<!--exponential shape factor for passive force-length relationship-->
+					<KshapePassive>4</KshapePassive>
+					<!--force-velocity shape factor-->
+					<Af>0.29999999999999999</Af>
+					<!--maximum normalized lengthening force-->
+					<Flen>1.8</Flen>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.01</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.040000000000000001</deactivation_time_constant>
+				</Thelen2003Muscle>
+
+<Thelen2003Muscle name="BICshort">
+					<!--Flag indicating whether the force is applied or not. If true the forceis applied to the MultibodySystem otherwise the force is not applied.NOTE: Prior to OpenSim 4.0, this behavior was controlled by the 'isDisabled' property, where 'true' meant that force was not being applied. Thus, if 'isDisabled' is true, then 'appliesForce` is false.-->
+					<appliesForce>true</appliesForce>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="BICshort-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/base</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.0046750000000000003 -0.01231 0.13475000000000001</location>
+								</PathPoint>
+								<PathPoint name="BICshort-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/base</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.0070749999999999997 -0.040039999999999999 0.14507</location>
+								</PathPoint>
+								<PathPoint name="BICshort-P3">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.011169999999999999 -0.075759999999999994 -0.011010000000000001</location>
+								</PathPoint>
+								<PathPoint name="BICshort-P4">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.01703 -0.12125 -0.010789999999999999</location>
+								</PathPoint>
+								<PathPoint name="BICshort-P5">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.022800000000000001 -0.1754 -0.0063</location>
+								</PathPoint>
+								<PathPoint name="BICshort-P6">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.0075100000000000002 -0.048390000000000002 0.02179</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+						<!--The wrap objects that are associated with this path-->
+						<PathWrapSet>
+							<objects />
+							<groups />
+						</PathWrapSet>
+					</GeometryPath>
+					<!--The maximum force this actuator can produce.-->
+					<optimal_force>1</optimal_force>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>435.56</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.1321</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.1923</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0</pennation_angle_at_optimal>
+					<!--Maximum contraction velocity of the fibers, in optimal fiberlengths/second-->
+					<max_contraction_velocity>10</max_contraction_velocity>
+					<!--tendon strain at maximum isometric muscle force-->
+					<FmaxTendonStrain>0.033000000000000002</FmaxTendonStrain>
+					<!--passive muscle strain at maximum isometric muscle force-->
+					<FmaxMuscleStrain>0.59999999999999998</FmaxMuscleStrain>
+					<!--shape factor for Gaussian active muscle force-length relationship-->
+					<KshapeActive>0.5</KshapeActive>
+					<!--exponential shape factor for passive force-length relationship-->
+					<KshapePassive>4</KshapePassive>
+					<!--force-velocity shape factor-->
+					<Af>0.29999999999999999</Af>
+					<!--maximum normalized lengthening force-->
+					<Flen>1.8</Flen>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.01</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.040000000000000001</deactivation_time_constant>
+				</Thelen2003Muscle>
+
+<Thelen2003Muscle name="BRA">
+					<!--Flag indicating whether the force is applied or not. If true the forceis applied to the MultibodySystem otherwise the force is not applied.NOTE: Prior to OpenSim 4.0, this behavior was controlled by the 'isDisabled' property, where 'true' meant that force was not being applied. Thus, if 'isDisabled' is true, then 'appliesForce` is false.-->
+					<appliesForce>true</appliesForce>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="BRA-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.0067999999999999996 -0.1739 -0.0035999999999999999</location>
+								</PathPoint>
+								<PathPoint name="BRA-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.0032000000000000002 -0.023900000000000001 0.00089999999999999998</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+						<!--The wrap objects that are associated with this path-->
+						<PathWrapSet>
+							<objects>
+								<PathWrap name="pathwrap">
+									<!--A WrapObject that this PathWrap interacts with.-->
+									<wrap_object>TRI</wrap_object>
+									<!--The wrapping method used to solve the path around the wrap object.-->
+									<method>hybrid</method>
+									<!--The range of indices to use to compute the path over the wrap object.-->
+									<range>-1 -1</range>
+								</PathWrap>
+							</objects>
+							<groups />
+						</PathWrapSet>
+					</GeometryPath>
+					<!--The maximum force this actuator can produce.-->
+					<optimal_force>1</optimal_force>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>987.25999999999999</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.085800000000000001</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.053499999999999999</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0</pennation_angle_at_optimal>
+					<!--Maximum contraction velocity of the fibers, in optimal fiberlengths/second-->
+					<max_contraction_velocity>10</max_contraction_velocity>
+					<!--tendon strain at maximum isometric muscle force-->
+					<FmaxTendonStrain>0.033000000000000002</FmaxTendonStrain>
+					<!--passive muscle strain at maximum isometric muscle force-->
+					<FmaxMuscleStrain>0.59999999999999998</FmaxMuscleStrain>
+					<!--shape factor for Gaussian active muscle force-length relationship-->
+					<KshapeActive>0.5</KshapeActive>
+					<!--exponential shape factor for passive force-length relationship-->
+					<KshapePassive>4</KshapePassive>
+					<!--force-velocity shape factor-->
+					<Af>0.29999999999999999</Af>
+					<!--maximum normalized lengthening force-->
+					<Flen>1.8</Flen>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.01</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.040000000000000001</deactivation_time_constant>
+				</Thelen2003Muscle>
+
+<Thelen2003Muscle name="DELT_ant">
+					<!--Minimum allowed value for control signal. Used primarily when solving for control values.-->
+					<min_control>0.01</min_control>
+					<!--Maximum allowed value for control signal. Used primarily when solving for control values.-->
+					<max_control>1</max_control>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="DELT_ant-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/base</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.029999999999999999 0.02 0.02</location>
+								</PathPoint>
+								<PathPoint name="DELT_ant-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.012 -0.12 0.0050000000000000001</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+					</GeometryPath>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>1142.5999999999999</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.097600000000000006</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.092999999999999999</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0.38400000000000001</pennation_angle_at_optimal>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.014999999999999999</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.050000000000000003</deactivation_time_constant>
+				</Thelen2003Muscle>
+
+<Thelen2003Muscle name="DELT_post">
+					<!--Minimum allowed value for control signal. Used primarily when solving for control values.-->
+					<min_control>0.01</min_control>
+					<!--Maximum allowed value for control signal. Used primarily when solving for control values.-->
+					<max_control>1</max_control>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="DELT_post-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/base</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.029999999999999999 0.02 0.02</location>
+								</PathPoint>
+								<PathPoint name="DELT_post-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.012 -0.12 0.0050000000000000001</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+					</GeometryPath>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>944.70000000000005</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.13780000000000001</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.037999999999999999</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0.31419999999999998</pennation_angle_at_optimal>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.014999999999999999</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.050000000000000003</deactivation_time_constant>
+				</Thelen2003Muscle>
+
+<Thelen2003Muscle name="PECT">
+					<!--Minimum allowed value for control signal. Used primarily when solving for control values.-->
+					<min_control>0.01</min_control>
+					<!--Maximum allowed value for control signal. Used primarily when solving for control values.-->
+					<max_control>1</max_control>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="PECT-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/base</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.050000000000000003 -0.050000000000000003 0.059999999999999998</location>
+								</PathPoint>
+								<PathPoint name="PECT-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.01 -0.080000000000000002 0.012</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+					</GeometryPath>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>444.30000000000001</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.14419999999999999</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.028000000000000001</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0.29670000000000002</pennation_angle_at_optimal>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.014999999999999999</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.050000000000000003</deactivation_time_constant>
+				</Thelen2003Muscle>
+
+<Thelen2003Muscle name="LAT">
+					<!--Minimum allowed value for control signal. Used primarily when solving for control values.-->
+					<min_control>0.01</min_control>
+					<!--Maximum allowed value for control signal. Used primarily when solving for control values.-->
+					<max_control>1</max_control>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="LAT-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/base</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.059999999999999998 -0.080000000000000002 0.050000000000000003</location>
+								</PathPoint>
+								<PathPoint name="LAT-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>-0.0050000000000000001 -0.070000000000000007 0.0050000000000000001</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+					</GeometryPath>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>290.39999999999998</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.25419999999999998</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.074999999999999997</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0.43630000000000002</pennation_angle_at_optimal>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.014999999999999999</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.050000000000000003</deactivation_time_constant>
+				</Thelen2003Muscle>
+
+<Thelen2003Muscle name="BRD_hand">
+					<!--Minimum allowed value for control signal. Used primarily when solving for control values.-->
+					<min_control>0.01</min_control>
+					<!--Maximum allowed value for control signal. Used primarily when solving for control values.-->
+					<max_control>1</max_control>
+					<!--The path of the actuator which defines length and lengthening speed.-->
+					<GeometryPath name="path">
+						<!--Default appearance attributes for this AbstractGeometryPath.-->
+						<Appearance>
+							<!--The color, (red, green, blue), [0, 1], used to display the geometry. -->
+							<color>0.80000000000000004 0.10000000000000001 0.10000000000000001</color>
+						</Appearance>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="BRD_hand-P1">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_humerus</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.016 -0.214 0</location>
+								</PathPoint>
+								<PathPoint name="BRD_hand-P2">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.014999999999999999 -0.02 0.029999999999999999</location>
+								</PathPoint>
+								<PathPoint name="BRD_hand-P3">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.016 -0.089999999999999997 0.037999999999999999</location>
+								</PathPoint>
+								<PathPoint name="BRD_hand-P4">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.017000000000000001 -0.16 0.045999999999999999</location>
+								</PathPoint>
+								<PathPoint name="BRD_hand-P5">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.017999999999999999 -0.22500000000000001 0.051999999999999998</location>
+								</PathPoint>
+								<PathPoint name="BRD_hand-P6">
+									<!--Path to a Component that satisfies the Socket 'parent_frame' of type PhysicalFrame (description: The frame in which this path point is defined.).-->
+									<socket_parent_frame>/bodyset/r_ulna_radius_hand</socket_parent_frame>
+									<!--The fixed location of the path point expressed in its parent frame.-->
+									<location>0.018499999999999999 -0.26800000000000002 0.056000000000000001</location>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+					</GeometryPath>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>320</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.11</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.17000000000000001</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0.12</pennation_angle_at_optimal>
+					<!--Activation time constant, in seconds-->
+					<activation_time_constant>0.014999999999999999</activation_time_constant>
+					<!--Deactivation time constant, in seconds-->
+					<deactivation_time_constant>0.050000000000000003</deactivation_time_constant>
+				</Thelen2003Muscle>
+</Muscles>
+

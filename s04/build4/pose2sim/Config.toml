@@ -1,0 +1,262 @@
+[project]
+project_dir = "C:\\Users\\21652\\Downloads\\OpenSimOverView\\Vision-Based Optical Simulation\\s04\\build4\\pose2sim"
+multi_person = false
+participant_height = "auto"
+participant_mass = 70.0
+frame_rate = 50
+frame_range = "all"
+exclude_from_batch = []
+
+[pose]
+pose_model = "Body_with_feet"
+mode = "lightweight"
+det_frequency = 4
+device = "auto"
+backend = "auto"
+parallel_workers_pose = "auto"
+display_detection = false
+overwrite_pose = true
+save_video = "none"
+output_format = "openpose"
+average_likelihood_threshold_pose = 0.5
+tracking_mode = "none"
+max_distance_px = 100
+deepsort_params = "{'max_age':30, 'n_init':3, 'nms_max_overlap':0.8, 'max_cosine_distance':0.3, 'nn_budget':200, 'max_iou_distance':0.8}"
+handle_LR_swap = false
+undistort_points = false
+[[pose.CUSTOM]]
+name = "Hip"
+id = 19
+[[pose.CUSTOM.children]]
+name = "RHip"
+id = 12
+[[pose.CUSTOM.children.children]]
+name = "RKnee"
+id = 14
+[[pose.CUSTOM.children.children.children]]
+name = "RAnkle"
+id = 16
+[[pose.CUSTOM.children.children.children.children]]
+name = "RBigToe"
+id = 21
+[[pose.CUSTOM.children.children.children.children.children]]
+name = "RSmallToe"
+id = 23
+
+
+[[pose.CUSTOM.children.children.children.children]]
+name = "RHeel"
+id = 25
+
+
+
+
+[[pose.CUSTOM.children]]
+name = "LHip"
+id = 11
+[[pose.CUSTOM.children.children]]
+name = "LKnee"
+id = 13
+[[pose.CUSTOM.children.children.children]]
+name = "LAnkle"
+id = 15
+[[pose.CUSTOM.children.children.children.children]]
+name = "LBigToe"
+id = 20
+[[pose.CUSTOM.children.children.children.children.children]]
+name = "LSmallToe"
+id = 22
+
+
+[[pose.CUSTOM.children.children.children.children]]
+name = "LHeel"
+id = 24
+
+
+
+
+[[pose.CUSTOM.children]]
+name = "Neck"
+id = 18
+[[pose.CUSTOM.children.children]]
+name = "Head"
+id = 17
+[[pose.CUSTOM.children.children.children]]
+name = "Nose"
+id = 0
+
+
+[[pose.CUSTOM.children.children]]
+name = "RShoulder"
+id = 6
+[[pose.CUSTOM.children.children.children]]
+name = "RElbow"
+id = 8
+[[pose.CUSTOM.children.children.children.children]]
+name = "RWrist"
+id = 10
+
+
+
+[[pose.CUSTOM.children.children]]
+name = "LShoulder"
+id = 5
+[[pose.CUSTOM.children.children.children]]
+name = "LElbow"
+id = 7
+[[pose.CUSTOM.children.children.children.children]]
+name = "LWrist"
+id = 9
+
+
+
+
+
+[synchronization]
+synchronization_gui = true
+display_sync_plots = true
+save_sync_plots = true
+keypoints_to_consider = "all"
+approx_time_maxspeed = "auto"
+time_range_around_maxspeed = 2.0
+likelihood_threshold_synchronization = 0.4
+filter_cutoff = 6
+filter_order = 4
+
+[calibration]
+calibration_type = "convert"
+
+[triangulation]
+reproj_error_threshold_triangulation = 30
+likelihood_threshold_triangulation = 0.3
+min_cameras_for_triangulation = 2
+max_distance_m = 1.0
+max_unseen_frames = 100
+interp_if_gap_smaller_than = 30
+interpolation = "linear"
+remove_incomplete_frames = false
+sections_to_keep = "all"
+min_chunk_size = 10
+fill_large_gaps_with = "last_value"
+show_interp_indices = true
+make_c3d = true
+
+[filtering]
+reject_outliers = true
+filter = true
+type = "butterworth"
+display_figures = false
+save_filt_plots = true
+make_c3d = true
+
+[markerAugmentation]
+feet_on_floor = false
+make_c3d = true
+
+[kinematics]
+use_augmentation = true
+use_simple_model = true
+filter_ik = false
+ik_filter_type = "acc_minimizing"
+right_left_symmetry = true
+default_height = 1.7
+parallel_workers_kinematics = "auto"
+remove_individual_scaling_setup = true
+remove_individual_ik_setup = true
+large_hip_knee_angles = 90
+trimmed_extrema_percent = 50
+
+[logging]
+use_custom_logging = false
+
+[calibration.convert]
+convert_from = "qualisys"
+
+[calibration.calculate]
+save_debug_images = true
+
+[personAssociation.single_person]
+likelihood_threshold_association = 0.3
+reproj_error_threshold_association = 20
+tracked_keypoint = "Neck"
+
+[personAssociation.multi_person]
+reconstruction_error_threshold = 0.1
+min_affinity = 0.2
+
+[filtering.butterworth]
+cut_off_frequency = 6
+order = 4
+
+[filtering.kalman]
+trust_ratio = 500
+smooth = true
+
+[filtering.one_euro]
+cut_off_frequency = 4
+beta = 1.5
+d_cut_off_frequency = 1.0
+
+[filtering.gcv_spline]
+cut_off_frequency = "auto"
+smoothing_factor = 1.0
+
+[filtering.acc_minimizing]
+cut_off_frequency = 6
+
+[filtering.loess]
+nb_values_used = 5
+
+[filtering.gaussian]
+sigma_kernel = 1
+
+[filtering.median]
+kernel_size = 3
+
+[filtering.butterworth_on_speed]
+cut_off_frequency = 10
+order = 4
+
+[calibration.convert.caliscope]
+
+[calibration.convert.qualisys]
+binning_factor = 1
+
+[calibration.convert.optitrack]
+
+[calibration.convert.vicon]
+
+[calibration.convert.opencap]
+
+[calibration.convert.easymocap]
+
+[calibration.convert.biocv]
+
+[calibration.convert.anipose]
+
+[calibration.convert.freemocap]
+
+[calibration.calculate.intrinsics]
+overwrite_intrinsics = false
+intrinsics_extension = "jpg"
+extract_every_N_sec = 1
+intrinsics_corners_nb = [ 4, 7,]
+intrinsics_square_size = 60
+show_detection_intrinsics = true
+
+[calibration.calculate.extrinsics]
+calculate_extrinsics = true
+extrinsics_method = "scene"
+extrinsics_extension = "png"
+show_reprojection_error = true
+moving_cameras = false
+
+[calibration.calculate.extrinsics.board]
+board_position = "vertical"
+extrinsics_corners_nb = [ 4, 7,]
+extrinsics_square_size = 60
+
+[calibration.calculate.extrinsics.scene]
+object_coords_3d = [ [ -2.0, 0.3, 0.0,], [ -2.0, 0.0, 0.0,], [ -2.0, 0.0, 0.05,], [ -2.0, -0.3, 0.0,], [ 0.0, 0.3, 0.0,], [ 0.0, 0.0, 0.0,], [ 0.0, 0.0, 0.05,], [ 0.0, -0.3, 0.0,],]
+
+[calibration.calculate.extrinsics.keypoints]

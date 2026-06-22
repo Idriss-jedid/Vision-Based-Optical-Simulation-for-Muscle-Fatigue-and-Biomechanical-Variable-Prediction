@@ -1,0 +1,10 @@
+model,input,mean,torque,activations,forces,fatigue
+LightGBM + FE + Optuna (trial#11),angles cleaned + anthro,0.952,0.937,0.962,0.964,0.936
+Transformer (TST),engineered features,0.882,0.859,0.931,0.92,0.801
+XGBoost/LightGBM + FE 3D,3D raw-derived + rolling,0.867,0.79,0.851,0.852,0.917
+LSTM,engineered features,0.86,0.819,0.904,0.902,0.784
+LightGBM 3D (basic),3D raw-derived,0.842,0.719,0.818,0.816,0.923
+TST (vanilla),3D raw windows,0.805,0.667,0.782,0.781,0.885
+PatchTST,3D raw windows,0.792,0.651,0.789,0.787,0.836
+iTransformer,3D raw windows,0.772,0.68,0.808,0.807,0.726
+TFT-lite,3D raw windows,0.657,0.359,0.6,0.624,0.823

@@ -106,7 +106,9 @@ rapide / temps réel). Tout le batch utilise lightweight.
 **Résultat 4-cam motion vs Vicon (s04) :**
 - **coude** : r=0.990, MAE 4.6°, ROM 3–128°
 - **épaule** : `r_shoulder_elev` 17–51° (data-driven), **MAE 1.0°**, dir3D 4.3° (avant : fixé 20°)
-- **overlay Blender** (modèle vs marqueurs réels) : résidu **67 mm → 37.6 mm** (−44 %) grâce à l'épaule data-driven
+- **placement Blender** : le modèle est placé dans le frame .trc (Umeyama sur les 3 marqueurs)
+  avec le **lean (inclinaison) clampé à ≤ 10°** → le modèle reste **debout (vertical)**, pas penché.
+  Résidu overlay s04 ≈ **39 mm** (8 sujets : 37–73 mm).
 
 **Sur les 8 sujets** (s03→s11) — moyennes : coude **r=0.993, MAE 4.2°** ; épaule **MAE 1.2°,
 dir3D 5.5°** ; combiné **2.7°** ; RMSE 3D **27.8 mm** ; **100 % frames valides**. Tableau complet +

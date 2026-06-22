@@ -1,0 +1,148 @@
+
+---------------------------------------------------------------------
+Pose estimation for pose2sim, for all frames.
+On Wednesday 10. June 2026, 10:38:01
+Project directory: C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim
+---------------------------------------------------------------------
+
+Estimating pose...
+
+Using model HALPE_26 for Body_with_feet pose estimation in lightweight mode.
+Inference run only every 4 frames. Inbetween, pose estimation tracks previously detected points. Detections are dropped if their average keypoint likelihood is below 0.5.
+No valid CUDA installation found: using OpenVINO backend with CPU.
+Using 4 parallel workers.
+Tracking mode none not recognized. Using sports2d method.
+Tracking is performed with sports2d.
+
+Found 4 video files in .\videos.
+Using cpu device with openvino backend.
+Using cpu device with openvino backend.
+Using cpu device with openvino backend.
+Using cpu device with openvino backend.
+
+Pose estimation took 00h01m05s.
+
+
+---------------------------------------------------------------------
+Triangulation of 2D points for pose2sim, for all frames.
+On Wednesday 10. June 2026, 10:39:07
+Project directory: C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim
+---------------------------------------------------------------------
+
+Triangulating in single-person mode.
+
+Mean reprojection error for Hip is 4.7 px (~ 0.02 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for RHip is 4.8 px (~ 0.02 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for RKnee is 2.3 px (~ 0.01 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for RAnkle is 1.5 px (~ 0.006 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for RBigToe is 3.2 px (~ 0.014 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for RSmallToe is 2.5 px (~ 0.011 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for RHeel is 2.0 px (~ 0.008 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for LHip is 4.3 px (~ 0.018 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for LKnee is 2.8 px (~ 0.012 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for LAnkle is 1.9 px (~ 0.008 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for LBigToe is 6.0 px (~ 0.025 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for LSmallToe is 3.3 px (~ 0.014 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for LHeel is 2.6 px (~ 0.011 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for Neck is 2.4 px (~ 0.01 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for Head is 1.7 px (~ 0.007 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for Nose is 7.3 px (~ 0.031 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for RShoulder is 2.9 px (~ 0.012 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for RElbow is 3.6 px (~ 0.015 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for RWrist is 7.3 px (~ 0.031 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for LShoulder is 2.7 px (~ 0.011 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for LElbow is 4.8 px (~ 0.02 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+Mean reprojection error for LWrist is 7.3 px (~ 0.031 m), reached with 0.0 excluded cameras. 
+  No frames needed to be interpolated.
+
+--> Mean reprojection error for all points on frames 0 to 882 is 3.7 px, which roughly corresponds to 15.6 mm. 
+Cameras were excluded if likelihood was below 0.3 and if the reprojection error was above 30 px.
+Gaps were interpolated with linear method if smaller than 30 frames. Larger gaps were filled with the last valid value.
+In average, 0.0 cameras had to be excluded to reach these thresholds.
+Camera cam_65906101 was excluded 0% of the time, Camera cam_60457274: 0%, Camera cam_58860488: 0%, and Camera cam_50591643: 0%.
+3D coordinates are stored at C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim\pose-3d\pose2sim_0-881.trc.
+
+
+
+All trc files have been converted to c3d.
+Limb swapping was not handled.
+Lens distortions were not taken into account.
+
+Triangulation took 00h00m14s.
+
+
+---------------------------------------------------------------------
+Filtering 3D coordinates for pose2sim, for all frames.
+On Wednesday 10. June 2026, 10:39:22
+Project directory: C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim
+---------------------------------------------------------------------
+
+
+Filtering 3D trc data for person 0...
+--> Outliers rejected with a Hampel filter.
+--> Filter type: Butterworth low-pass. Order 4, Cut-off frequency 6 Hz.
+Filtered 3D .trc coordinates are stored at C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim\pose-3d\pose2sim_0-881_filt_butterworth.trc.
+All filtered trc files have been converted to c3d.
+Filtering plots are saved in C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim\pose-3d\filtering_plots_ik.
+
+
+
+---------------------------------------------------------------------
+Augmentation process for pose2sim, for all frames.
+On Wednesday 10. June 2026, 10:39:39
+Project directory: C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim
+---------------------------------------------------------------------
+
+Subject height automatically calculated for pose2sim_0-881_filt_butterworth.trc: 1.8 m
+
+
+Using Stanford LSTM v0.3 augmenter model. Feet are NOT vertically offset to be at floor level.
+Running v0.3_lower marker augmentation.
+Running v0.3_upper marker augmentation.
+Augmented marker coordinates are stored at C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim\pose-3d\pose2sim_0-881_filt_butterworth_LSTM.trc.
+Augmented trc files have been converted to c3d.
+
+Marker augmentation took 00h00m00s.
+
+
+---------------------------------------------------------------------
+OpenSim scaling and inverse kinematics for pose2sim, for all frames.
+On Wednesday 10. June 2026, 10:39:41
+Project directory: C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim
+---------------------------------------------------------------------
+
+Subject height automatically calculated for pose2sim_0-881_filt_butterworth_LSTM.trc: 1.8 m
+Subject mass: 70.0 kg
+
+Scaling TRC file: C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim\pose-3d\pose2sim_0-881_filt_butterworth_LSTM.trc...
+	Done. Scaled model saved to C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim\kinematics\pose2sim_0-881_filt_butterworth_LSTM_scaled.osim
+
+Running inverse kinematics...
+Running inverse kinematics on C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim\pose-3d\pose2sim_0-881_filt_butterworth_LSTM.trc
+	Done. Joint angle data saved to C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim\kinematics\pose2sim_0-881_filt_butterworth_LSTM.mot
+
+OpenSim logs saved to C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation\s04\build4\pose2sim\kinematics\opensim_logs.txt.
+
+OpenSim scaling and inverse kinematics took 00h00m03s.
+

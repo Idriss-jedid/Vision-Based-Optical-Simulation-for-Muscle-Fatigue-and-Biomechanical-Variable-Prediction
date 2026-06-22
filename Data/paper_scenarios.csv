@@ -1,0 +1,6 @@
+scenario,r_shoulder_elev_deg,r_elbow_flex_deg,load_kg,notes
+a_reset,0.0,0.0,0.0,Reset posture
+b_low_elbow,0.0,30.0,0.0,Low elbow flexion
+c_moderate_elbow,0.0,60.0,0.0,Moderate elbow flexion
+d_high_elbow,0.0,80.0,0.0,High elbow flexion
+e_loaded_reaching,0.0,80.0,2.0,Loaded elbow flexion with 2 kg on hand

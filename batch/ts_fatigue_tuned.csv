@@ -1,0 +1,3 @@
+,MF_BIClong,MF_BICshort,MF_BRA,MF_BRD_hand,mean
+LSTM_tuned,0.846,0.72,0.862,0.873,0.825
+PatchTST_tuned,0.854,0.761,0.876,0.884,0.844

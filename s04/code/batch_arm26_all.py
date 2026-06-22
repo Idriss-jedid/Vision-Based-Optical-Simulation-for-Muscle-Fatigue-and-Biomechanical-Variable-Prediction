@@ -13,9 +13,10 @@ import opensim as osim
 
 HERE = os.path.dirname(os.path.abspath(__file__)); S04 = os.path.dirname(HERE); ROOT = os.path.dirname(S04)
 BASE = os.path.join(ROOT, "Model", "arm26_paper_loaded_brd_elbow_research.osim")
-SRC = r"D:\Download\fit3d_train\train"; BATCH = os.path.join(ROOT, "batch")
+SRC = r"D:\Download\fit3d\fit3d_train\train"; BATCH = os.path.join(ROOT, "batch")
 EXERCISE = "dumbbell_biceps_curls"
-SUBJECTS = ["s03", "s04", "s05", "s07", "s08", "s09", "s10", "s11"]
+import sys
+SUBJECTS = sys.argv[1:] if len(sys.argv) > 1 else ["s03", "s04", "s05", "s07", "s08", "s09", "s10", "s11"]
 MK = [("RShoulder", "r_acromion"), ("RElbow", "r_humerus_epicondyle"), ("RWrist", "r_radius_styloid")]
 RATE, ELB_MAX, FPS = 100.0, 128.0, 50.0
 H_ZUP = np.array([[1., 0, 0, 0], [0, 0, -1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])
@@ -165,9 +166,23 @@ def process(subj):
         return out
     mdl = fk_markers(True); good = ~np.isnan(realA).any((1, 2))
     R, c, t0 = umeyama(realA[good].reshape(-1, 3), mdl[good].reshape(-1, 3))
-    placed = (c * (realA.reshape(-1, 3) @ R.T) + t0).reshape(len(realA), 3, 3)
-    resid = float(np.mean(np.linalg.norm(placed[good] - mdl[good], axis=2)) * 1000)
-    Minv = np.eye(4); Minv[:3, :3] = R.T / c; Minv[:3, 3] = -(R.T @ t0) / c
+    # --- placement : lean CLAMPÉ à <=10° (modèle quasi-debout, garde le fit Umeyama) ---
+    Rinv = R.T; upw = Rinv @ np.array([0., 1., 0.]); TILT_MAX = np.radians(10.0)
+    tilt = np.arccos(np.clip(upw @ np.array([0., 1., 0.]), -1, 1))
+    if tilt > TILT_MAX:
+        ax = np.cross(upw, np.array([0., 1., 0.])); ax = ax / (np.linalg.norm(ax) + 1e-12)
+        th = tilt - TILT_MAX; ca2, sa2 = np.cos(th), np.sin(th); x, y, z = ax
+        Rcorr = np.array([[ca2+x*x*(1-ca2), x*y*(1-ca2)-z*sa2, x*z*(1-ca2)+y*sa2],
+                          [y*x*(1-ca2)+z*sa2, ca2+y*y*(1-ca2), y*z*(1-ca2)-x*sa2],
+                          [z*x*(1-ca2)-y*sa2, z*y*(1-ca2)+x*sa2, ca2+z*z*(1-ca2)]])
+        Rc = Rcorr @ Rinv
+    else:
+        Rc = Rinv
+    A = Rc / c
+    mu_model = mdl[good].reshape(-1, 3).mean(0); mu_real = realA[good].reshape(-1, 3).mean(0)
+    b = mu_real - A @ mu_model
+    resid = float(np.mean(np.linalg.norm(((A @ mdl[good].reshape(-1, 3).T).T + b) - realA[good].reshape(-1, 3), axis=1)) * 1000)
+    Minv = np.eye(4); Minv[:3, :3] = A; Minv[:3, 3] = b
     rows = []
     for tt in tr:
         csh.setValue(sm, np.radians(np.interp(tt, tv, shv)), False); cel.setValue(sm, np.radians(np.interp(tt, tv, fl))); mm.realizePosition(sm)

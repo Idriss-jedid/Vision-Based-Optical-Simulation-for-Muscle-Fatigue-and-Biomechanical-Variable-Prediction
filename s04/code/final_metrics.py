@@ -8,7 +8,7 @@ import numpy as np
 from scipy.signal import medfilt
 
 ROOT = r"C:\Users\21652\Downloads\OpenSimOverView\Vision-Based Optical Simulation"
-SRC = r"D:\Download\fit3d_train\train"; EX = "dumbbell_biceps_curls"
+SRC = r"D:\Download\fit3d\fit3d_train\train"; EX = "dumbbell_biceps_curls"
 SUBJECTS = ["s03", "s04", "s05", "s07", "s08", "s09", "s10", "s11"]
 KMAP = {"RShoulder": 14, "RElbow": 15, "RWrist": 16}
 

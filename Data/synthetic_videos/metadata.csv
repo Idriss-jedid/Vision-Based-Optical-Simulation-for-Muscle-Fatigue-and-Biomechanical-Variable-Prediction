@@ -1,0 +1,4 @@
+filename,subject_id,age,sex,height_cm,weight_kg,arm,load_kg,intended_reps,actual_reps,camera_fps,resolution,distance_m,view,source,fatigue_note
+S01_right_2kg_side_10rep_take01.mp4,S01,28,M,178,75,right,2,10,10,60,1920x1080,3.0,right-side-sagittal,synthetic-render(paper_minjerk_fatigue_10cycles.mot),"mild slowing + tremor toward end (kinematic fatigue baked in)"
+S01_right_2kg_side_30rep_take01.mp4,S01,28,M,178,75,right,2,30,30,60,1920x1080,3.0,right-side-sagittal,synthetic-render(paper_minjerk_fatigue_30cycles.mot),"pronounced fatigue: ROM reduction + slowing + tremor"
+S01_right_0kg_side_10rep_take01.mp4,S01,28,M,178,75,right,0,10,10,60,1920x1080,3.0,right-side-sagittal,synthetic-render(paper_minjerk_fatigue_10cycles.mot),"light familiarization set, minimal fatigue"

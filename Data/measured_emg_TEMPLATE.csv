@@ -1,0 +1,8 @@
+# Subject-specific measured data -> save your recording as measured_emg.csv
+# channel: surface-EMG site. pctMVC_mean = mean linear-envelope EMG over the
+# curl, normalised to an MVC trial (%). Brachialis is deep -> not surface-recordable.
+channel,pctMVC_mean
+biceps,
+brachioradialis,
+triceps,
+mvc_or_mpf_decline_pct,

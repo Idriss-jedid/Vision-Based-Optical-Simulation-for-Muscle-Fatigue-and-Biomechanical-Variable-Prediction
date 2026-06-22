@@ -1,0 +1,9 @@
+Rows: 6001
+Start Time: 0.0
+End Time: 60.0
+Columns: ['time', 'theta_s', 'theta_e', 'theta_s_ref', 'theta_e_ref', 'emg_biceps', 'emg_triceps', 'emg_deltoid', 'emg_biceps_fn', 'emg_triceps_fn', 'emg_deltoid_fn', 'load_kg', 'condition', 'subject_id', 'trial_id']
+Total NaN: 0
+Min/Max Stats:
+     emg_biceps  emg_triceps  emg_deltoid  emg_biceps_fn  emg_triceps_fn  emg_deltoid_fn
+min    0.012368     0.010048     0.012589       0.012432        0.010048        0.012119
+max    0.095924     0.011629     0.049415       0.068345        0.011629        0.030027
