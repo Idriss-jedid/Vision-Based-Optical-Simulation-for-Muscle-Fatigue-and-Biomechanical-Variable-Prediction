@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vision-Based Optical Simulation — Muscle Fatigue & Biomechanics from Video</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e1a;--card:#141b2e;--line:#243049;--txt:#e8edf7;--mut:#8b97b3;--acc:#6c8cff;--acc2:#22d3a8;--warn:#ff7a59}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:0 24px}
+.grad{background:linear-gradient(120deg,#6c8cff,#22d3a8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+a{color:var(--acc2)}
+header{text-align:center;padding:80px 0 40px;position:relative;overflow:hidden}
+header::before{content:"";position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(108,140,255,.16),transparent 60%)}
+h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-.02em;position:relative}
+.sub{color:var(--mut);font-size:1.15rem;margin:18px auto 26px;max-width:680px;position:relative}
+.authors{color:var(--txt);font-weight:600;position:relative}
+.affil{color:var(--mut);font-size:.9rem;position:relative}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px;position:relative}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);color:var(--txt);padding:11px 20px;border-radius:30px;font-weight:600;font-size:.92rem;transition:.2s;text-decoration:none}
+.btn:hover{border-color:var(--acc2);transform:translateY(-2px)}
+.btn.primary{background:linear-gradient(120deg,#6c8cff,#22d3a8);color:#06121f;border:none}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px;position:relative}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:8px 16px;font-size:.84rem;font-weight:600}
+.chip b{color:var(--acc2)}
+section{padding:48px 0;border-top:1px solid var(--line)}
+h2{font-size:1.7rem;font-weight:800;margin-bottom:18px}
+p.lead{color:var(--mut)}
+video,img.fig{width:100%;border-radius:16px;border:1px solid var(--line);background:#000;display:block}
+img.fig{background:#fff}
+.cap{color:var(--mut);font-size:.88rem;text-align:center;margin-top:10px}
+.abstract{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 30px;color:#cdd6ea}
+.abstract b{color:var(--txt)}
+.kw{margin-top:16px;color:var(--mut);font-size:.9rem}
+table{width:100%;border-collapse:collapse;font-size:.92rem;margin-top:10px}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--mut);text-transform:uppercase;font-size:.72rem;letter-spacing:.06em}
+td.win{color:var(--acc2);font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+footer{padding:40px 0;text-align:center;color:var(--mut);font-size:.86rem;border-top:1px solid var(--line)}
+.step{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.step .n{font-family:'JetBrains Mono';color:var(--acc2);font-weight:700;flex-shrink:0;width:30px}
+.step b{color:var(--txt)}.step span{color:var(--mut)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>Vision-Based <span class="grad">Optical Simulation</span></h1>
+  <p class="sub">Muscle fatigue & biomechanical variable prediction from ordinary markerless video — Pose2Sim → OpenSim Arm26 → AI surrogate.</p>
+  <div class="authors">Idriss Jedid</div>
+  <div class="affil">Biceps-curl case study · 8 subjects · Fit3D dataset</div>
+  <div class="btns">
+    <a class="btn primary" href="#demo">▶ Watch demo</a>
+    <a class="btn" href="https://github.com/Idriss-jedid/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction">⭐ Code (GitHub)</a>
+    <a class="btn" href="https://fit3d.imar.ro/fit3d">📊 Fit3D dataset</a>
+  </div>
+  <div class="chips">
+    <div class="chip">AI accuracy <b>R²=0.95</b></div>
+    <div class="chip"><b>~890×</b> faster than OpenSim</div>
+    <div class="chip"><b>~49×</b> lighter</div>
+    <div class="chip"><b>8</b> subjects · LOSO</div>
+  </div>
+</div></header>
+
+<section id="demo"><div class="wrap">
+  <h2>🎬 Demo</h2>
+  <video src="demo.mp4" controls muted loop poster="banner.gif"></video>
+  <p class="cap">2-minute walk-through: capture → RTMPose live → 3D triangulation → OpenSim Arm26 → AI surrogate.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>📝 Abstract</h2>
+  <div class="abstract">
+    Estimating internal biomechanical variables and muscle fatigue from visual observations remains a significant challenge in biomechanics, rehabilitation, and sports science. Conventional approaches rely on wearable sensors such as electromyography (EMG), inertial measurement units (IMUs), or motion-capture systems, which are often expensive, intrusive, and difficult to deploy outside controlled laboratory environments.
+    <br><br>
+    This work presents a <b>vision-based musculoskeletal simulation framework</b> for predicting biomechanical variables and muscle fatigue from ordinary RGB videos. The approach combines pose estimation, biomechanical modeling, and physics-based simulation in a unified pipeline. Human motion is captured with standard cameras and processed to extract body keypoints; kinematic features are reconstructed and integrated into an <b>OpenSim</b> musculoskeletal model to estimate joint torques, muscle activations, and muscle forces. A <b>three-compartment fatigue model</b> then characterizes muscle fatigue dynamics during exercise.
+    <br><br>
+    A case study on <b>biceps curls</b> generates a physics-informed dataset linking visual observations to internal biomechanical states. Experiments show that vision-derived kinematics accurately reproduce biomechanical quantities of interest while providing meaningful estimates of muscle activation and fatigue progression. The framework enables non-contact biomechanical monitoring and creates a foundation for future <b>AI models</b> that predict internal biomechanical variables directly from video — a low-cost, scalable solution for rehabilitation, ergonomics, sports performance, and remote healthcare.
+    <div class="kw"><b>Keywords:</b> Vision-Based Biomechanics · Muscle Fatigue · OpenSim · Pose Estimation · Musculoskeletal Modeling · Artificial Intelligence · Human Motion Analysis</div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>🔬 Pipeline</h2>
+  <img class="fig" src="pipeline.png" alt="pipeline">
+  <div style="margin-top:22px">
+    <div class="step"><span class="n">1</span><div><b>Calibration</b> — <span>Fit3D cameras → Pose2Sim <code>Calib.toml</code> (translation = −R·T; took elbow r from 0.86 → 0.99).</span></div></div>
+    <div class="step"><span class="n">2</span><div><b>RTMPose 2D</b> — <span>26 HALPE keypoints / frame / view (4 cameras, 50 fps).</span></div></div>
+    <div class="step"><span class="n">3</span><div><b>Triangulation</b> — <span>confidence-weighted multi-view → 3D joints (.trc); 27.8 mm vs Vicon.</span></div></div>
+    <div class="step"><span class="n">4</span><div><b>Butterworth 2 Hz</b> — <span>zero-phase filtering → clean joint accelerations.</span></div></div>
+    <div class="step"><span class="n">5</span><div><b>OpenSim Arm26</b> — <span>scaled model → Inverse Dynamics, Static Optimization, 3-Compartment fatigue.</span></div></div>
+    <div class="step"><span class="n">6</span><div><b>AI surrogate</b> — <span>LightGBM (+ Optuna + SHAP) replaces OpenSim in milliseconds.</span></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>🧪 Three approaches</h2>
+  <table>
+    <tr><th>Approach</th><th>Input</th><th>R²</th><th>End-to-end</th><th>AI inference</th></tr>
+    <tr><td>A · .mot + .osim</td><td>angles + scaled model</td><td class="win">0.952</td><td>144.5 s</td><td>0.36 s</td></tr>
+    <tr><td>B · 3D joints</td><td>triangulated 3D</td><td>0.904</td><td>144.1 s</td><td>0.10 s</td></tr>
+    <tr><td>C · 2D keypoints</td><td>raw 2D (4 cams)</td><td>0.860</td><td>104.2 s</td><td>0.17 s</td></tr>
+  </table>
+</div></section>
+
+<section><div class="wrap">
+  <h2>⚡ Why replace OpenSim?</h2>
+  <div class="grid2">
+    <div><img class="fig" src="timing.png" alt="speedup"><p class="cap">~890× faster than the OpenSim solver.</p></div>
+    <div><img class="fig" src="resources.png" alt="resources"><p class="cap">~49× lighter to deploy (21 MB vs ~1 GB).</p></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  Built on the public <a href="https://fit3d.imar.ro/fit3d">Fit3D</a> dataset · OpenSim Arm26 · Pose2Sim · LightGBM<br>
+  <a href="https://github.com/Idriss-jedid/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction">View the code on GitHub</a> · © Idriss Jedid
+</div></footer>
+</body>
+</html>
