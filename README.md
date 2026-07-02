@@ -234,4 +234,4 @@ per-subject outputs kept out to keep the repository lean.
 Built on the public **Fit3D** dataset ([fit3d.imar.ro/fit3d](https://fit3d.imar.ro/fit3d)); the Arm26
 musculoskeletal model ships with **OpenSim**.
 
-**Author** — Idriss Jedid
+**Authors** — Idriss Jedid · Jinan Charafeddine · Abderraouf Benali
