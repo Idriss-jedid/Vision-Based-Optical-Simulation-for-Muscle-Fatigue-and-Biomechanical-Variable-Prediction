@@ -2,51 +2,13 @@
 <h3 align="center">Muscle Fatigue & Biomechanical Variable Prediction from Markerless Video</h3>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/accuracy-R²%200.95-22d3a8"/>
-  <img src="https://img.shields.io/badge/speed-~890×%20faster-6c8cff"/>
-  <img src="https://img.shields.io/badge/footprint-~49×%20lighter-ff7a59"/>
-  <img src="https://img.shields.io/badge/subjects-8%20·%20LOSO-lightgrey"/>
-  <img src="https://img.shields.io/badge/OpenSim-Arm26-informational"/>
-  <img src="https://img.shields.io/badge/Pose2Sim-RTMPose-informational"/>
-  <img src="https://img.shields.io/badge/dataset-Fit3D-blueviolet"/>
+  <img src="https://img.shields.io/badge/single%20camera-R²%200.938%20from%202D-7c3aed"/>
+  <img src="https://img.shields.io/badge/multi--camera-R²%200.952-2563eb"/>
+  <img src="https://img.shields.io/badge/solver%20replaced-up%20to%201680×%20faster-ea580c"/>
+  <img src="https://img.shields.io/badge/OpenSim-Arm26%20%2B%203CC-e11d48"/>
+  <img src="https://img.shields.io/badge/built%20on-Pose2Sim%20·%20OpenCap%20Monocular-informational"/>
+  <img src="https://img.shields.io/badge/datasets-Fit3D%20·%20MM--Fit-blueviolet"/>
 </p>
-
----
-
-## 📝 Abstract
-
-Estimating internal biomechanical variables and muscle fatigue from visual observations remains
-a significant challenge in biomechanics, rehabilitation, and sports science. Conventional
-approaches rely on wearable sensors such as electromyography (EMG), inertial measurement
-units (IMUs), or motion-capture systems, which are often expensive, intrusive, and difficult to
-deploy outside controlled laboratory environments.
-
-This work presents a **vision-based musculoskeletal simulation framework** for predicting
-biomechanical variables and muscle fatigue from ordinary RGB videos. The proposed approach
-combines pose estimation, biomechanical modeling, and physics-based simulation within a
-unified pipeline. Human motion is first captured using a standard monocular camera and
-processed to extract body keypoints. Kinematic features are then reconstructed and integrated
-into an **OpenSim** musculoskeletal model to estimate joint torques, muscle activations, and muscle
-forces. A **three-compartment fatigue model** is subsequently employed to characterize muscle
-fatigue dynamics during exercise.
-
-A case study involving **biceps curl** exercises is conducted to generate a physics-informed dataset
-linking visual observations to internal biomechanical states. Experimental results demonstrate
-that vision-derived kinematic measurements can accurately reproduce biomechanical quantities
-of interest while providing meaningful estimates of muscle activation and fatigue progression.
-The proposed framework enables non-contact biomechanical monitoring and creates a
-foundation for future **artificial intelligence models** capable of directly predicting internal
-biomechanical variables from video data.
-
-The proposed methodology offers a low-cost, scalable, and practical solution for applications in
-rehabilitation, ergonomics, sports performance assessment, and remote healthcare monitoring.
-
-> **Keywords:** Vision-Based Biomechanics, Muscle Fatigue, OpenSim, Pose Estimation,
-> Musculoskeletal Modeling, Artificial Intelligence, Human Motion Analysis
-
----
-
-## 🎬 Demo
 
 <p align="center">
   <video src="https://idriss-jedid.github.io/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction/demo.mp4" controls muted loop width="860" poster="media/banner.gif"></video>
@@ -54,98 +16,301 @@ rehabilitation, ergonomics, sports performance assessment, and remote healthcare
 
 <p align="center">
   <b>▶ <a href="https://idriss-jedid.github.io/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction/">Live demo page</a></b>
-  &nbsp;·&nbsp; <a href="media/demo.mp4">download the video</a>
+  &nbsp;·&nbsp; <a href="media/demo.mp4">visual demo</a>
+  &nbsp;·&nbsp; <a href="media/app.mp4">the application</a>
+  &nbsp;·&nbsp; <a href="media/blender.mp4">Blender check</a>
 </p>
 
-<p align="center"><em>2-minute walk-through: capture → RTMPose → 3D triangulation → OpenSim Arm26 → AI surrogate.</em></p>
+---
 
-<p align="center"><img src="media/banner.gif" width="760" alt="RTMPose live overlay on four camera views"/></p>
+## The project in one minute
 
-<p align="center"><img src="figures/pipeline_diagram_full.png" width="880" alt="Full pipeline"/></p>
+A camera sees the movement; it does not see the muscle. This project estimates what the muscle is
+doing during a dumbbell biceps curl — **elbow torque, muscle activations, muscle forces and
+fatigue**, 13 signals in all — from ordinary markerless video, then trains a network that produces
+the same 13 signals in milliseconds.
+
+Nothing here was built from scratch. Four existing building blocks were taken, read, changed where
+they did not fit the question, and extended with new layers:
+
+<p align="center"><img src="figures/diagrams/blocks.png" width="920" alt="Four building blocks: Pose2Sim, OpenCap Monocular, OpenSim Arm26, the 3CC fatigue model — what was taken, changed and added"/></p>
+
+| Building block | Taken | Changed | Added on top |
+|---|---|---|---|
+| **[Pose2Sim](https://github.com/perfanalytics/pose2sim)** (route 1, 4 cameras) | RTMPose 2D pose, multi-view triangulation, Butterworth filtering | calibration rebuilt from the Fit3D parameters with `t = −R·T`; single-person, lightweight configuration | 3 joint centres → 2 joint angles → scaled Arm26 → LightGBM surrogate |
+| **[OpenCap Monocular](https://arxiv.org/abs/2603.24733)** (route 2, 1 camera) | ViTPose 2D pose, WHAM / SMPL 3D estimate | its two-stage optimisation replaced by a gravity alignment and a 2 Hz filter; shoulder centre blended from two regressors | 3 joint centres → 2 joint angles → scaled Arm26 → BiGRU surrogate → application |
+| **OpenSim Arm26** (shared) | the 2-DOF arm model: shoulder elevation + elbow flexion | a 2 kg dumbbell welded to the hand; 11 muscle paths tested, 4 flexors kept; brachioradialis path corrected | scaling to each subject's measured arm |
+| **3CC fatigue** (Xia & Frey-Law, 2008) (shared) | the three-compartment model: resting → active → fatigued | elbow rates (F = 0.00912 /s, R = 0.00094 /s); coupled to static optimisation | a fatigue state for each of the 4 flexors, every frame |
+
+The two routes are the two ways in. **Route 1** is the accurate reference (4 calibrated cameras).
+**Route 2** is the one a patient can use at home (1 ordinary video), and the one the application runs.
 
 ---
 
-## 📊 Dataset — Fit3D
+## 🧩 My contribution — how each tool was read, and what was added
 
-We build on the public **Fit3D** dataset: **https://fit3d.imar.ro/fit3d**
+### 1 · Pose2Sim → the multi-camera route
 
-Fit3D is a large-scale dataset for **3D human pose and shape estimation during fitness training**.
-It contains repetitions of common gym exercises recorded simultaneously by **multiple synchronized,
-calibrated RGB cameras**, together with **Vicon marker-based 3D ground truth** and camera calibration
-parameters. This combination of *multi-view video + lab-grade ground truth* is exactly what a
-markerless biomechanics pipeline needs: video to drive the pipeline, and Vicon to validate it.
+**How Pose2Sim works.** Pose2Sim is driven by a project folder (`calibration/`, `videos/`,
+`Config.toml`) and one function per stage:
+`calibration → poseEstimation → synchronization → personAssociation → triangulation → filtering → markerAugmentation → kinematics`.
+Its last two stages turn the body into an augmented marker set and solve a full-body OpenSim
+inverse kinematics.
 
-**How we use it in this project:**
+**What I used, and how** ([`src/pipeline/batch_all_subjects.py`](src/pipeline/batch_all_subjects.py)):
 
-| What we take from Fit3D | How it is used here |
-|---|---|
-| The **`dumbbell_biceps_curls`** exercise, 4 calibrated camera views, 50 fps | the only sensor input to the whole pipeline |
-| **8 subjects** (s03 … s11) | one model per subject + **leave-one-subject-out** validation |
-| **Camera calibration parameters** | converted to the Pose2Sim `Calib.toml` convention (`t = −R·T`) |
-| **Vicon 3D ground truth** | validates the triangulated 3D joints (27.8 mm) and elbow angle (r = 0.99) |
+| Pose2Sim stage | Used? | How it is used here |
+|---|:---:|---|
+| `calibration` | replaced | Fit3D already provides intrinsics and extrinsics, so `setup()` writes Pose2Sim's `Calib.toml` directly: `K` from the focal lengths and principal point, distortions `[k1, k2, p1, p2]`, rotation as a Rodrigues vector, and **translation = −R·T** (Pose2Sim expects the OpenCV extrinsic, not the camera centre). This one fix took the elbow-angle correlation from about 0.86 to **0.99**. |
+| `poseEstimation` | ✅ | RTMPose, `pose_model = Body_with_feet` (HALPE-26), `mode = lightweight`, `det_frequency = 4`, `multi_person = false` |
+| `synchronization`, `personAssociation` | — | not needed: Fit3D views are synchronized and contain one person |
+| `triangulation` | ✅ | `min_cameras_for_triangulation = 2`, `reproj_error_threshold_triangulation = 30`, `likelihood_threshold_triangulation = 0.3`, `interp_if_gap_smaller_than = 30` |
+| `filtering` | ✅ | Pose2Sim's Butterworth; its `*_filt_butterworth.trc` feeds scaling and learning. A **2 Hz zero-phase Butterworth** (`filtfilt`) is added before any differentiation, so accelerations are clean enough for inverse dynamics |
+| `markerAugmentation`, `kinematics` | ❌ | replaced by the arm layers below — a curl moves one joint, a full-body model would ask for kinematics the task does not need |
 
-> We do **not** redistribute Fit3D media. The raw videos and the per-frame 2D keypoints are
-> regenerated locally from Fit3D; only the lightweight derived data (3D `.trc`, motions, calibrations,
-> scaled models, datasets, metrics) is committed here. Download the videos from the link above.
+**What I added on top:**
+
+1. **Three joint centres** read from the `.trc` (`RShoulder`, `RElbow`, `RWrist`), and the two Arm26
+   coordinates computed analytically: elbow flexion `180° − ∠(S−E, W−E)` and shoulder elevation as
+   the angle of the upper arm to the vertical. Written as an OpenSim motion (`.mot`).
+2. **Validation against Vicon** for every subject: the same angles computed from Fit3D's
+   `joints3d_25`, aligned by a 0–7-frame lag search and a linear calibration (`best_affine`), then
+   correlation and MAE.
+3. **Subject scaling** from the median segment lengths ([`scale_from_trc.py`](src/pipeline/scale_from_trc.py)).
+4. **The OpenSim stage** — ID, SO, 3CC ([`run_stage2_pipeline.py`](src/pipeline/run_stage2_pipeline.py),
+   [`run_id_so.py`](src/pipeline/run_id_so.py), [`run_fatigue_so.py`](src/pipeline/run_fatigue_so.py)).
+5. **Three LightGBM surrogates** plugged in at three depths of the pipeline ([`src/ml/`](src/ml)).
+
+### 2 · OpenCap Monocular → the single-camera route
+
+**How OpenCap Monocular works.** With one camera there is nothing to triangulate, so a network
+*guesses* the 3D pose and an optimisation *repairs* the guess before OpenSim reads it:
+`video → ViTPose (2D + confidence) → WHAM / SMPL (initial 3D) → 2-stage optimisation (camera and shape, then pose, feet and floor) → 38 virtual markers → OpenSim Scale + IK, 33 DOF → kinematics → ground-reaction kinetics`.
+
+**Reading it against our task.** The second optimisation stage is dominated by foot-contact, foot-slide
+and floor terms; the 38 markers exist to constrain 33 degrees of freedom; the kinetics are ground
+reaction forces for walking. A seated, loaded elbow flexion has no foot contact, needs two degrees of
+freedom, and wants muscle-level outputs that OpenCap Monocular does not produce. So the fork is right
+after WHAM.
+
+| OpenCap Monocular stage | Kept? | What replaces it |
+|---|:---:|---|
+| One static camera, no calibration | ✅ | one Fit3D view used as the only camera (16 runs over 8 subjects) |
+| ViTPose 2D keypoints | ✅ | unchanged |
+| WHAM / SMPL initial 3D | ✅ | unchanged, read from `wham_output.pkl`; **shoulder centre = mean of WHAM's COCO and H36M regressors**, which misplace the shoulder in opposite directions |
+| Two-stage optimisation | ❌ | **gravity alignment**: the mean torso-up vector (mid-shoulder − mid-hip) is rotated onto +Y, so shoulder elevation reads directly from the upper arm; then a **2 Hz zero-phase Butterworth** removes jitter before differentiation |
+| 38 virtual markers | ❌ | **3 joint centres** — shoulder, elbow, wrist |
+| Scale + IK, 33 DOF | ❌ | **analytical** shoulder and elbow angles, and a scaled **2-DOF Arm26** |
+| Kinematics → GRF kinetics | ❌ | Inverse Dynamics → Static Optimization → **3CC fatigue** |
+| — | ➕ | a **BiGRU** surrogate at three entry levels, and a patient / clinician **application** |
+
+The lighter correction has a measured cost: OpenCap Monocular reports 4.8° rotational error, this
+route measures 6.94° at the elbow — still inside the 10° limit fixed before testing.
+
+### 3 · OpenSim Arm26 → the loaded arm
+
+<p align="center"><img src="figures/diagrams/arm26.png" width="900" alt="Arm26: taken, then rebuilt — dumbbell, eleven muscle paths, four flexors kept"/></p>
+
+- **Taken:** Arm26, the smallest OpenSim model that still contains the mechanics of a curl
+  (shoulder elevation + elbow flexion). Full-body models would need trunk and leg kinematics a camera
+  cannot constrain, and many unused muscles inside the optimisation.
+- **Changed:** a **2 kg** body (`load_2kg`) welded to the hand with a `WeldJoint`
+  ([`build_arm26_model.py`](src/pipeline/build_arm26_model.py)) — mass only, so gravity acts on it
+  through the same dynamics as the limb. The muscle set was **enriched to 11 paths**, then filtered by
+  experiment: static optimisation shows the load is carried by the four elbow flexors — BRA 41.7 %,
+  BIClong 39.9 %, BICshort 11.5 %, BRD 6.9 % — while the triceps stay near 1 % and the deltoids,
+  pectoralis and latissimus at 0. **The four flexors are kept and reported.** The brachioradialis path
+  was corrected until its peak elbow moment arm reached 7.51 cm near 114°.
+- **Added:** scaling to each subject's humerus and forearm, so forces are subject-specific.
+
+### 4 · The 3CC fatigue model → fatigue per muscle
+
+<p align="center"><img src="figures/diagrams/fatigue_3cc.png" width="900" alt="Three-compartment fatigue model and its sensitivity to load and repetitions"/></p>
+
+- **Taken:** the three-compartment model of Xia & Frey-Law (2008): motor units move between
+  *resting*, *active* and *fatigued*, `dMF/dt = F·MA − R·MF`, `capacity = 1 − MF`.
+- **Changed:** elbow rates from Frey-Law et al. (2012), **F = 0.00912 /s, R = 0.00094 /s**, and the
+  model is **coupled to static optimisation** ([`run_fatigue_so.py`](src/pipeline/run_fatigue_so.py)):
+  each frame, a muscle cannot exceed its fatigued capacity, so the load shifts to the others, which
+  raises their activation and in turn their fatigue. If the flexors together cannot meet the demand,
+  task failure is flagged.
+- **Checked:** the fatigued fraction of BIClong grows with load and repetitions — 2.7 % (0 kg ·
+  10 rep), 5.8 % (2 kg · 10), 17.3 % (2 kg · 30), 28.5 % (4 kg · 30).
 
 ---
 
-## 🔬 Methodology — how it was built, step by step
+## 🎥 Route 1 — Multi-camera, built on Pose2Sim
 
-The system is a single pipeline that turns multi-camera video into internal biomechanics, and then
-learns to shortcut the expensive physics with machine learning.
+<p align="center"><img src="figures/diagrams/fork_pose2sim.png" width="920" alt="Pose2Sim: shared front end, own biomechanics"/></p>
 
-### Stage 1 — Markerless motion capture (Pose2Sim)
+<p align="center"><img src="figures/diagrams/ai_multi.png" width="760" alt="Multi-camera classical pipeline with timings and the three AI entry points"/></p>
 
-1. **Calibration.** The Fit3D camera parameters are converted into a Pose2Sim `Calib.toml`. The crucial
-   detail is the translation convention: Pose2Sim expects the OpenCV extrinsic `tvec`, i.e.
-   **`translation = −R·T`** (not the camera centre `T`). Getting this right took the elbow-angle
-   correlation from ~0.86 to **0.99** — it is the single most important fix in the whole pipeline.
-2. **2D pose estimation.** Each frame of each of the 4 views is processed by **RTMPose** (HALPE-26),
-   giving 26 body keypoints with confidence scores (~103 s per subject).
-3. **Triangulation.** The 4 views are fused by confidence-weighted multi-view triangulation into 3D
-   joint trajectories (`.trc`). Mean reprojection error ≈ 8.3 px; 3D error vs Vicon ≈ 27.8 mm.
-4. **Filtering.** The 3D trajectories are smoothed with a **zero-phase Butterworth low-pass (2 Hz,
-   `filtfilt`)** before any differentiation — this is what makes the joint *accelerations* clean enough
-   to trust, and is the key lever for accurate inverse dynamics.
+### Blender check
 
-### Stage 2 — Biomechanical simulation (OpenSim Arm26)
+<p align="center"><a href="media/blender.mp4"><img src="figures/blender_check.jpg" width="820" alt="Blender: the reconstructed skeleton overlaid on a camera view"/></a></p>
 
-5. **Subject-specific scaling.** The generic **Arm26** model (2 DOF: shoulder + elbow; 7 Hill-type
-   muscles: TRIlong, TRIlat, TRImed, BIClong, BICshort, BRA, BRD) is scaled by each subject's measured
-   segment lengths. A 2 kg load is rigidly attached to the hand to reproduce the curl.
-6. **Inverse Dynamics (ID).** From the reconstructed joint angles → **joint torque**
-   (`τ = M(q)q̈ + C(q,q̇)q̇ + G(q)`).
-7. **Static Optimization (SO).** Torque is distributed across muscles by minimising effort
-   (`min Σ aₘ²` s.t. `Σ rₘ(q)·Fₘ = τ`) → **muscle forces** and **activations**.
-8. **Three-Compartment fatigue (3CC).** Activations drive a 3-compartment controller
-   (`dMF/dt = F·MA − R·MF`) that tracks the fraction of fatigued motor units over time → **muscle
-   fatigue**.
+The scaled model and its motion are loaded into Blender with the four calibrated cameras and the
+skeleton is laid over each original view. If the calibration, the triangulation or the angles were
+wrong, the skeleton would slide off the person. ▶ [`media/blender.mp4`](media/blender.mp4)
 
-This stage turns one curl into four time-resolved signals per frame: **joint torque, muscle
-activations, muscle forces, and muscle fatigue** — the *labels* for the learning stage.
+### Validation against Vicon
 
-### Stage 3 — AI surrogate (replace the physics)
+| Test | Metric | Result |
+|---|---|---|
+| 1 · 2D pose | reprojection error | **8.3 px** |
+| 2 · 3D reconstruction | distance / direction to Vicon | **27.8 mm / 5.5°** |
+| 3 · Joint angles | elbow correlation / MAE | **0.99 / 4.2°** |
+| 4 · Subject scaling | segment scale factors | **×0.85 – ×1.05** |
 
-9. **Feature engineering + learning.** A **LightGBM** gradient-boosting model is trained to predict the
-   13 biomechanical targets directly from kinematic features (angles / velocities / accelerations and
-   cumulative "memory" features that capture fatigue history). Hyper-parameters are tuned with
-   **Optuna** (TPE + Hyperband) and the model is explained with **SHAP**.
-10. **Validation.** **Leave-one-subject-out** cross-validation over the 8 subjects. The surrogate
-    reaches **R² = 0.95**, runs in **~0.1 s** (vs ~89 s for OpenSim, **~890× faster**) from a single
-    **21 MB** file (**~49× lighter** than the OpenSim + SimTK + Geometry stack).
+### AI surrogate
 
-### Where to tap the pipeline — three approaches
+| Approach | Input | mean R² | torque | activation | force | fatigue | End to end | AI inference |
+|----------|-------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **A — `.mot + .osim`** | angles + scaled model | **0.952** | 0.937 | 0.962 | 0.964 | 0.936 | 144.5 s | 0.36 s |
+| **B — 3D joints** | 3 triangulated joints | **0.904** | 0.827 | 0.922 | 0.916 | 0.893 | 144.1 s | 0.10 s |
+| **C — 2D keypoints** | raw 2D, 4 cameras | **0.860** | 0.782 | 0.873 | 0.881 | 0.845 | 104.2 s | 0.17 s |
 
-| Approach | Input | Accuracy (R²) | End-to-end | AI inference | Model |
-|----------|-------|:---:|:---:|:---:|:---:|
-| **A — `.mot + .osim`** | cleaned angles + scaled model | **0.952** | 144.5 s | 0.36 s | 21 MB |
-| **B — 3D joints** | 3 triangulated 3D joints | **0.904** | 144.1 s | 0.10 s | 21 MB |
-| **C — 2D keypoints** | raw 2D keypoints (4 cams) | **0.860** | 104.2 s | 0.17 s | 21 MB |
+Leave-one-subject-out over 8 subjects. OpenSim takes about 89 s per subject, the surrogate 0.1 s
+(**≈ 890×**), from one 21 MB file.
 
-The earlier the AI taps the pipeline, the less pre-processing it needs, at a small accuracy cost.
-On a held-out subject it reproduces torque (R² 0.90), activation (0.88), force (0.87) and fatigue
-(0.94). All result figures are in [`figures/`](figures).
+**Models compared**
+
+<p align="center">
+  <img src="figures/fig_tabular.png" width="430" alt="Tabular model benchmark"/>
+  <img src="figures/fig_deep.png" width="430" alt="Deep model benchmark"/>
+</p>
+
+| Model | Input | mean R² |
+|---|---|:---:|
+| **LightGBM + feature engineering + Optuna** | cleaned angles + anthropometry | **0.952** |
+| Transformer (TST) | engineered features | 0.882 |
+| XGBoost / LightGBM + features | 3D joints + rolling statistics | 0.867 |
+| LSTM | engineered features | 0.860 |
+| LightGBM (basic) | 3D joints | 0.842 |
+| TST (vanilla) · PatchTST · iTransformer · TFT-lite | raw 3D windows | 0.805 · 0.792 · 0.772 · 0.657 |
+
+<p align="center"><img src="figures/fig_fe_gain.png" width="560" alt="Gain from feature engineering and Optuna"/></p>
+
+**Curves — the surrogate against OpenSim, held-out subject**
+
+<p align="center"><img src="figures/fig_ts_s11.png" width="900" alt="Predicted against OpenSim over time, held-out subject s11"/></p>
+<p align="center"><img src="figures/fig_parity.png" width="900" alt="Parity plots"/></p>
+<p align="center">
+  <img src="figures/fig_per_subject.png" width="440" alt="Per-subject generalisation"/>
+  <img src="figures/fig_xai_heatmap.png" width="440" alt="SHAP importance per feature and target"/>
+</p>
+
+---
+
+## 📱 Route 2 — Single camera, built on OpenCap Monocular
+
+<p align="center"><img src="figures/diagrams/fork_opencap.png" width="920" alt="OpenCap Monocular: shared front end, own biomechanics"/></p>
+
+### Validation against Vicon — four tests, thresholds fixed beforehand
+
+| Test | Metric | Result | Limit | Verdict |
+|---|---|---|---|:---:|
+| 1 · 2D pose (ViTPose) | median reprojection | **7.7 px** | < 15 px | pass |
+| 2 · 3D reconstruction | RMSE / direction | **49.4 mm / 6.6°** | < 60 mm / 8° | pass |
+| 3 · Joint angles | elbow r / MAE | **0.993 / 6.94°** | > 0.90 / 10° | pass |
+| 4 · Subject scaling | humerus / forearm | **×0.943 / ×1.017** | 0.85 – 1.15 | pass |
+
+8 subjects, 16 single-camera runs; every test passes on every subject.
+
+<p align="center">
+  <img src="figures/singlecam/validation_per_subject.png" width="440" alt="Elbow correlation, elbow MAE and humerus scale per subject"/>
+  <img src="figures/singlecam/humerus_estimators.png" width="440" alt="Humerus length error for the COCO, H36M and blended shoulder estimators"/>
+</p>
+
+### From a validated pipeline to a training corpus
+
+Once validated, the pipeline labels any ordinary video with the 13 signals. MM-Fit (21 subjects, no
+reference) is added for learning only: **37 runs, 29 subjects, 25 615 frames**. No accuracy claim is
+drawn from MM-Fit.
+
+### The three AI entry levels
+
+<p align="center"><img src="figures/diagrams/ai_single.png" width="760" alt="Single-camera classical pipeline with timings and the three AI entry levels"/></p>
+
+| Level | Input | final R² | Time per trial | GPU |
+|---|---|:---:|:---:|:---:|
+| **L1** | joint angles | **0.984** | 458 s | yes |
+| **L2** | 3D joints | **0.956** | 455 s | yes |
+| **L3 — deployed** | 2D keypoints | **0.938** | 195 s | **no** |
+
+One 35 s recording costs **485 s** through the full pipeline (ViTPose 195 s, WHAM 260 s, OpenSim
+26.7 s). The OpenSim solve becomes a 15.9 ms forward pass (**≈ 1680×**), but only Level 3 starts
+early enough to remove WHAM — more than half the pipeline — and the GPU. Evaluation is grouped on the
+subject: no frame of a test subject is seen in training.
+
+**Models compared — best R² per level**
+
+| Architecture | Level 1 | Level 2 | Level 3 |
+|---|:---:|:---:|:---:|
+| **BiGRU** | **0.9842** | **0.9556** | **0.9376** |
+| Transformer | 0.9815 | 0.9493 | 0.9266 |
+| Informer | 0.9814 | 0.9471 | 0.9196 |
+| FEDformer | 0.9799 | 0.9446 | 0.9174 |
+| TFT-lite | 0.9738 | 0.9019 | 0.8604 |
+| Crossformer | 0.9553 | 0.8962 | 0.8535 |
+| PatchTST | 0.9440 | 0.8898 | 0.8413 |
+| iTransformer | 0.8897 | 0.8809 | 0.8403 |
+| *Final, 5-fold* | *0.984* | *0.956* | *0.938* |
+
+**Curves — Level 3, the deployed model, held-out subject**
+
+<p align="center"><img src="figures/singlecam/pred_L3.png" width="900" alt="Level 3 prediction against OpenSim, held-out subject s10"/></p>
+<p align="center">
+  <img src="figures/singlecam/train_L3_torque_activation.png" width="440" alt="Level 3 training and validation curves: torque and activation"/>
+  <img src="figures/singlecam/train_L3_force_fatigue.png" width="440" alt="Level 3 training and validation curves: force and fatigue"/>
+</p>
+
+Levels 1 and 2: [`pred_L1.png`](figures/singlecam/pred_L1.png) · [`pred_L2.png`](figures/singlecam/pred_L2.png).
+
+### The application
+
+<p align="center"><a href="media/app.mp4"><img src="figures/app/app_flow.jpg" width="900" alt="Patient phone app and clinician dashboard"/></a></p>
+
+1. The **clinician** prescribes an exercise from a web dashboard.
+2. The **patient** records one set with an ordinary camera, at home.
+3. The **analysis service** extracts 2D keypoints (RTMPose-s, on the CPU) and runs the Level-3 BiGRU:
+   the 13 signals come back.
+4. The **clinician** reviews the saved session — video and signals — and adjusts the prescription.
+
+**Reading the result: effort in the video → peak in the signal.**
+
+<p align="center"><img src="figures/app/peak_effort.jpg" width="900" alt="The recorded curl next to the predicted elbow torque and biceps activation, at the peak"/></p>
+
+In the recorded session the elbow torque peaks at **16.7 N·m** and the biceps (long head) activation
+at **0.55** at the same instant — the moment of the set where the arm is lifted hardest. The torque
+the elbow has to produce grows when the load is accelerated upward and as the forearm nears the
+horizontal, where the load's lever arm about the elbow is longest; the hardest moment of the lift is
+therefore where the curves peak, and the clinician can find it at a glance.
+
+---
+
+## ⚖️ Side by side
+
+| | Multi-camera · Pose2Sim | Single camera · OpenCap Monocular |
+|---|---|---|
+| What you need | 4 calibrated, synchronized cameras | 1 ordinary video |
+| 3D error against Vicon | **27.8 mm** | **49.4 mm** |
+| Elbow angle | **4.2°** MAE · r = 0.99 | **6.94°** MAE · r = 0.993 |
+| AI surrogate | LightGBM · R² **0.952** | BiGRU · R² **0.984**, **0.938** from 2D alone |
+| Solver replaced | 89 s → 0.1 s · **≈ 890×** | 26.7 s → 15.9 ms · **≈ 1680×** |
+| Subjects | 8 (Fit3D), leave-one-subject-out | 29 (Fit3D + MM-Fit), subject-grouped folds |
+| Role | the accurate reference | shipped in the application, no GPU |
+
+---
+
+## 📊 Datasets
+
+| Dataset | What it gives | How it is used |
+|---|---|---|
+| **[Fit3D](https://fit3d.imar.ro/fit3d)** — `dumbbell_biceps_curls`, 8 subjects | 4 synchronized calibrated cameras at 50 fps, camera parameters, **Vicon 3D joints** | route 1 (4 views), route 2 (each view alone), every validation |
+| **[MM-Fit](https://zenodo.org/records/7607736)** — 21 subjects | uncalibrated video, no motion capture | route 2 learning only |
+
+> Fit3D and MM-Fit media are **not** redistributed here; only lightweight derived data is committed.
 
 ---
 
@@ -154,54 +319,37 @@ On a held-out subject it reproduces torque (R² 0.90), activation (0.88), force 
 ```
 .
 ├── src/
-│   ├── pipeline/              # Vision → biomechanics
+│   ├── pipeline/              # Route 1: vision → biomechanics
+│   │   ├── batch_all_subjects.py    #   Fit3D → Calib.toml (t = −R·T) → Pose2Sim → metrics vs Vicon
 │   │   ├── run_stage2_pipeline.py   #   3D .trc → Arm26 → ID / SO / 3CC
-│   │   ├── build_arm26_model.py     #   build the loaded Arm26 model (2 kg curl)
+│   │   ├── build_arm26_model.py     #   Arm26 + 2 kg dumbbell (WeldJoint)
 │   │   ├── scale_from_trc.py        #   subject-specific scaling
-│   │   ├── batch_all_subjects.py · batch_calib_all.py · build_calib_world.py
-│   │   ├── extract_labels_all.py    #   OpenSim labels for the 8 subjects
-│   │   └── run_id_so.py · run_fatigue_so.py
-│   ├── ml/                   # The three AI surrogates
-│   │   ├── train_approach_A.py      #   A · from .mot + .osim
-│   │   ├── train_approach_B_3d.py   #   B · from 3D joints
-│   │   ├── train_approach_C_2d.py   #   C · from 2D keypoints
-│   │   └── benchmarks_tabular.py · benchmarks_deep.py
-│   └── viz/                  # Figures + timing / memory analysis
-│       ├── make_pipeline_figure.py · make_timing_figures.py
-│       ├── make_timing_levels.py · make_resources_figure.py
-│       └── timing_compare.py · memory_compare.py
-├── models/                    # Trained surrogates + the Arm26 model
-│   ├── approach_A_mot_osim/ · approach_B_3d/ · approach_C_2d/   # LightGBM .joblib + cards
-│   └── arm26/                #   arm26_loaded.osim · arm26_base.osim · HOW_IT_WORKS.md
-├── dataset/                   # ML datasets + metrics
-│   ├── ml_dataset_A.csv · ml_dataset_3D.csv · ml_dataset_3D_RAW.csv
-│   └── metrics_*.csv · MASTER_comparison.csv · timing_pipeline.csv
-├── figures/                   # All result figures (pipeline, timing, XAI, per-muscle, …)
-├── media/                     # demo video + preview GIF
-└── media/                     # demo video + preview GIF
+│   │   ├── run_id_so.py · run_fatigue_so.py   # ID + SO, 3CC coupled to SO
+│   │   └── batch_calib_all.py · build_calib_world.py · extract_labels_all.py
+│   ├── ml/                   # Route 1 surrogates: approaches A / B / C + benchmarks
+│   └── viz/                  # figures, timing, memory
+├── models/                    # LightGBM surrogates (A / B / C) + the Arm26 model
+├── dataset/                   # route 1 ML datasets + metrics
+├── figures/
+│   ├── diagrams/              # building blocks, the two forks, the AI entry levels, Arm26, 3CC
+│   ├── singlecam/             # route 2: validation, training curves, predictions
+│   └── app/                   # application screens, peak = effort
+└── media/                     # demo.mp4 · app.mp4 · blender.mp4 · banner.gif
 ```
 
----
-
-## 🚀 Reproduce
+## 🚀 Reproduce (route 1)
 
 ```bash
-# 1. environment (OpenSim + ML)
 conda create -n biomech python=3.10 && conda activate biomech
 pip install opensim pose2sim lightgbm optuna shap scikit-learn pandas matplotlib
-
-# 2. download the Fit3D videos -> https://fit3d.imar.ro/fit3d
-# 3. vision → biomechanics labels (per subject)
-python src/pipeline/run_stage2_pipeline.py
+# download the Fit3D videos -> https://fit3d.imar.ro/fit3d
+python src/pipeline/batch_all_subjects.py        # Pose2Sim + validation against Vicon
+python src/pipeline/run_stage2_pipeline.py       # Arm26: ID / SO / 3CC labels
 python src/pipeline/extract_labels_all.py
-
-# 4. train a surrogate (Approach B, 3D joints) + benchmarks
-python src/ml/train_approach_B_3d.py
+python src/ml/train_approach_B_3d.py             # a surrogate (approach B)
 python src/ml/benchmarks_tabular.py
-python src/viz/timing_compare.py && python src/viz/memory_compare.py
 ```
 
-Using a trained model:
 ```python
 import joblib
 m = joblib.load("models/approach_B_3d/lgbm_3d_vision.joblib")
@@ -209,29 +357,24 @@ y = m["y_scaler"].inverse_transform(m["model"].predict(m["x_scaler"].transform(X
 # y -> [elbow torque, 4× activation, 4× force, 4× fatigue]
 ```
 
----
-
 ## 📦 What is and isn't in the repo
 
-**Included** — the essential code (`src/`), the three trained surrogates and the Arm26 model
-(`models/`), the ML datasets and metrics (`dataset/`), all result figures (`figures/`) and the demo
-video (`media/`).
+**Included** — route 1 code (`src/`), its surrogates and the Arm26 model (`models/`), its datasets and
+metrics (`dataset/`), the figures of both routes (`figures/`) and the videos (`media/`).
 
-**Not included** — raw camera videos and per-frame 2D keypoints (regenerated by RTMPose from the
-**Fit3D** videos), the OpenSim `Geometry/` meshes, and exploratory / one-off scripts and intermediate
-per-subject outputs kept out to keep the repository lean.
-
----
+**Not included** — raw videos and per-frame keypoints (regenerated from Fit3D), OpenSim `Geometry/`
+meshes, and for route 2 the training notebooks, the BiGRU checkpoints and the application source:
+that route is documented here by its method, results and figures.
 
 ## 🛠️ Tech stack
 
-**Vision** Pose2Sim · RTMPose (HALPE-26) · OpenCV calibration &nbsp;|&nbsp;
-**Biomechanics** OpenSim · Arm26 · Inverse Dynamics · Static Optimization · 3-Compartment fatigue &nbsp;|&nbsp;
-**ML** LightGBM · Optuna (TPE / Hyperband) · SHAP · scikit-learn (LOSO CV)
+**Vision** Pose2Sim · RTMPose · ViTPose · WHAM / SMPL &nbsp;|&nbsp;
+**Biomechanics** OpenSim · Arm26 · Inverse Dynamics · Static Optimization · 3CC fatigue &nbsp;|&nbsp;
+**ML** LightGBM · BiGRU (PyTorch) · Optuna · SHAP · scikit-learn &nbsp;|&nbsp;
+**Application** FastAPI · SQLite · progressive web app
 
 ---
 
-Built on the public **Fit3D** dataset ([fit3d.imar.ro/fit3d](https://fit3d.imar.ro/fit3d)); the Arm26
-musculoskeletal model ships with **OpenSim**.
+Built on **Fit3D**, **MM-Fit**, **Pose2Sim**, **OpenCap Monocular**, **WHAM**, **ViTPose** and **OpenSim**.
 
-**Author** — Idriss Abderraouf Jedid 
+**Author** — Idriss Abderraouf Jedid
