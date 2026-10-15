@@ -55,7 +55,8 @@ footer{padding:30px 0;text-align:center;color:var(--mut);font-size:.84rem;border
   <div class="author">Idriss Abderraouf Jedid <span>· muscle forces and fatigue from ordinary markerless video</span></div>
   <div class="btns">
     <a class="btn" href="https://github.com/Idriss-jedid/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction#readme">📖 Full explanation (README)</a>
-    <a class="btn" href="https://fit3d.imar.ro/fit3d">📊 Fit3D dataset</a>
+    <a class="btn" href="https://fit3d.imar.ro/fit3d">📊 Fit3D</a>
+    <a class="btn" href="https://zenodo.org/records/7607736">📊 MM-Fit</a>
   </div>
 </div></header>
 
@@ -63,12 +64,12 @@ footer{padding:30px 0;text-align:center;color:var(--mut);font-size:.84rem;border
 <section id="abstract" style="border-top:none;padding-top:6px"><div class="wrap">
   <div class="tag" style="color:var(--mut)">Abstract</div>
   <div class="abstract">
-    Estimating internal biomechanical variables and muscle fatigue from visual observations remains a significant challenge in biomechanics, rehabilitation, and sports science. Conventional approaches rely on wearable sensors such as electromyography (EMG), inertial measurement units (IMUs), or motion-capture systems, which are often expensive, intrusive, and difficult to deploy outside controlled laboratory environments.
+    A camera records how the arm moves, not how hard its muscles work. This work estimates elbow torque and the activation, force and fatigue of the four elbow flexors from ordinary markerless video of a biceps curl. Two front ends recover the motion: a four-camera route built on <b>Pose2Sim</b> and a single-camera route built on <b>OpenCap Monocular</b>, both validated against Vicon motion capture (elbow angle error of 4.2° and 6.94°).
     <br><br>
-    This work presents a <b>vision-based musculoskeletal simulation framework</b> for predicting biomechanical variables and muscle fatigue from ordinary RGB videos. The approach combines pose estimation, biomechanical modeling, and physics-based simulation in a unified pipeline. Human motion is captured with standard cameras and processed to extract body keypoints; kinematic features are reconstructed and integrated into an <b>OpenSim</b> musculoskeletal model to estimate joint torques, muscle activations, and muscle forces. A <b>three-compartment fatigue model</b> then characterizes muscle fatigue dynamics during exercise.
+    The motion drives a subject-scaled <b>OpenSim Arm26</b> model carrying a 2 kg dumbbell; inverse dynamics, static optimisation and a <b>three-compartment fatigue model</b> yield 13 time-resolved signals. Learned surrogates then reproduce these signals without the solver: LightGBM reaches R² = 0.952 with four cameras, and a <b>BiGRU</b> reaches R² = 0.938 from single-camera 2D keypoints alone, about 1680 times faster than OpenSim and without a GPU.
     <br><br>
-    A case study on <b>biceps curls</b> generates a physics-informed dataset linking visual observations to internal biomechanical states. Experiments show that vision-derived kinematics accurately reproduce biomechanical quantities of interest while providing meaningful estimates of muscle activation and fatigue progression. The framework enables non-contact biomechanical monitoring and creates a foundation for <b>AI models</b> that predict internal biomechanical variables directly from video — a low-cost, scalable solution for rehabilitation, ergonomics, sports performance, and remote healthcare.
-    <div class="kw"><b>Keywords:</b> Vision-Based Biomechanics · Muscle Fatigue · OpenSim · Pose Estimation · Musculoskeletal Modeling · Artificial Intelligence · Human Motion Analysis</div>
+    This model runs in a <b>web and mobile application</b> in which a patient records an exercise at home and a clinician reviews the resulting signals. Data come from the <a href="https://fit3d.imar.ro/fit3d">Fit3D</a> and <a href="https://zenodo.org/records/7607736">MM-Fit</a> datasets.
+    <div class="kw"><b>Keywords:</b> markerless motion capture · musculoskeletal simulation · muscle fatigue · OpenSim · pose estimation · surrogate modelling · rehabilitation</div>
   </div>
 </div></section>
 
