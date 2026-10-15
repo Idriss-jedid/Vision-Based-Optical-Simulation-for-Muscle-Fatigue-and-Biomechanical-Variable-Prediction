@@ -15,20 +15,37 @@
 
 ## Abstract
 
-A camera records how the arm moves, not how hard its muscles work. This work estimates elbow torque
-and the activation, force and fatigue of the four elbow flexors from ordinary markerless video of a
-biceps curl. Two front ends recover the motion: a four-camera route built on Pose2Sim and a
-single-camera route built on OpenCap Monocular, both validated against Vicon motion capture (elbow
-angle error of 4.2° and 6.94°). The motion drives a subject-scaled OpenSim Arm26 model carrying a 2 kg
-dumbbell; inverse dynamics, static optimisation and a three-compartment fatigue model yield 13
-time-resolved signals. Learned surrogates then reproduce these signals without the solver: LightGBM
-reaches R² = 0.952 with four cameras, and a BiGRU reaches R² = 0.938 from single-camera 2D keypoints
-alone, about 1680 times faster than OpenSim and without a GPU. This model runs in a web and mobile
-application in which a patient records an exercise at home and a clinician reviews the resulting
-signals. Data come from the Fit3D and MM-Fit datasets.
+Muscle activation, force and fatigue are central to rehabilitation, yet they are usually measured
+with electromyography, force sensors or marker-based motion capture: equipment that is costly,
+intrusive and confined to the laboratory. An ordinary RGB camera, by contrast, is available
+everywhere, but it only records how a limb moves, not how its muscles work.
 
-**Keywords:** markerless motion capture · musculoskeletal simulation · muscle fatigue · OpenSim ·
-pose estimation · surrogate modelling · rehabilitation
+This work presents a vision-based framework that estimates the internal biomechanics of the upper
+limb from markerless RGB video, demonstrated on the dumbbell biceps curl. Two routes recover the
+motion of the arm. The multi-camera route extends Pose2Sim: RTMPose detects 2D keypoints in four
+calibrated views, which are triangulated into 3D joints. The single-camera route extends OpenCap
+Monocular: ViTPose and WHAM estimate the 3D body from a single video, which is then aligned with
+gravity and filtered. In both routes, the shoulder, elbow and wrist give the two joint angles of the
+arm. Validated against Vicon motion capture, the elbow angle error is 4.2° with four cameras and
+6.94° with one camera.
+
+The recovered motion drives a subject-scaled OpenSim Arm26 musculoskeletal model carrying a 2 kg
+dumbbell. Inverse dynamics, static optimisation and a three-compartment fatigue model produce
+thirteen time-resolved signals: the elbow torque and the activation, force and fatigue of the four
+elbow flexors (biceps long and short heads, brachialis and brachioradialis).
+
+Because this physics-based pipeline takes several minutes per recording, machine-learning surrogates
+are trained to reproduce its outputs directly. With four cameras, LightGBM reaches R² = 0.952
+against OpenSim. With a single camera, a bidirectional GRU predicts the thirteen signals from 2D
+keypoints alone with R² = 0.938 on unseen subjects, about 1,680 times faster than the OpenSim solve
+and without a GPU.
+
+This model is integrated into a web and mobile application: the patient records an exercise at home
+with a phone camera, and the clinician reviews the resulting muscle signals remotely. The framework
+offers a low-cost, non-contact way to monitor muscle effort and fatigue in rehabilitation. Data are
+drawn from the Fit3D and MM-Fit datasets.
+
+**Keywords:** RGB camera · markerless motion capture · human pose estimation · 3D reconstruction · musculoskeletal modelling · OpenSim · muscle activation · muscle force · muscle fatigue · surrogate model · deep learning · tele-rehabilitation
 
 ---
 
