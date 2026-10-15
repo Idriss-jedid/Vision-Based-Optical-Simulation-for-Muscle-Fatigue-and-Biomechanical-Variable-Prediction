@@ -100,24 +100,46 @@ expected (2.7 % to 28.5 % across four conditions).
 ## 3. AI surrogate
 
 The simulated signals become training labels for a model that predicts them directly. The model can
-start at three depths of the pipeline; the earlier it starts, the more computation it saves.
+start at three depths of the pipeline; the earlier it starts, the more computation it saves. The same
+idea is applied to both routes.
 
-<p align="center"><img src="figures/diagrams/ai_single.png" width="700" alt="Single-camera pipeline and the three AI entry levels"/></p>
+<table>
+<tr>
+<th align="center">Four cameras · LightGBM</th>
+<th align="center">One camera · BiGRU</th>
+</tr>
+<tr>
+<td align="center"><img src="figures/diagrams/ai_multi.png" width="430" alt="Multi-camera pipeline and its three AI entry points"/></td>
+<td align="center"><img src="figures/diagrams/ai_single.png" width="430" alt="Single-camera pipeline and its three AI entry levels"/></td>
+</tr>
+<tr>
+<td valign="top">
 
-| Single camera (BiGRU) | Input | R² | Time per trial | GPU |
+| Entry point | Input | R² |
+|---|---|:---:|
+| A | joint angles + scaled model | **0.952** |
+| B | 3D joints | 0.904 |
+| C | 2D keypoints | 0.860 |
+
+OpenSim 89 s → LightGBM 0.1 s (≈ 890×).
+
+</td>
+<td valign="top">
+
+| Entry point | Input | R² | Time | GPU |
 |---|---|:---:|:---:|:---:|
 | Level 1 | joint angles | 0.984 | 458 s | yes |
 | Level 2 | 3D joints | 0.956 | 455 s | yes |
-| **Level 3 — deployed** | **2D keypoints** | **0.938** | **195 s** | **no** |
+| **Level 3** | **2D keypoints** | **0.938** | **195 s** | **no** |
 
-Level 3 is deployed: it removes the 3D reconstruction step, cuts the processing time by more than half
-and runs on a CPU, for 0.046 less R² than Level 1.
+OpenSim 26.7 s → BiGRU 15.9 ms (≈ 1680×).
 
-| Four cameras (LightGBM) | Input | R² |
-|---|---|:---:|
-| Approach A | joint angles + scaled model | 0.952 |
-| Approach B | 3D joints | 0.904 |
-| Approach C | 2D keypoints | 0.860 |
+</td>
+</tr>
+</table>
+
+**Deployed model: single camera, Level 3.** It removes the 3D reconstruction step, cuts the
+processing time by more than half and runs on a CPU, for 0.046 less R² than Level 1.
 
 ---
 
