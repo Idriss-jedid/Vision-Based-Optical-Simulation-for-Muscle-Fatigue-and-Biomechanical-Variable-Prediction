@@ -243,6 +243,9 @@ One 35 s recording costs **485 s** through the full pipeline (ViTPose 195 s, WHA
 early enough to remove WHAM — more than half the pipeline — and the GPU. Evaluation is grouped on the
 subject: no frame of a test subject is seen in training.
 
+**Why Level 3 is the one deployed:** 195 s per trial instead of 458 s, and it runs on a CPU with no
+GPU, for only 0.046 less R² than Level 1 (0.938 against 0.984).
+
 **Models compared — best R² per level**
 
 | Architecture | Level 1 | Level 2 | Level 3 |
