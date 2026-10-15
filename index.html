@@ -59,14 +59,8 @@ footer{padding:30px 0;text-align:center;color:var(--mut);font-size:.84rem;border
   </div>
 </div></header>
 
-<!-- 1 · DEMO -->
-<section id="demo" style="border-top:none;padding-top:6px"><div class="wrap">
-  <video id="demovid" src="demo.mp4" controls muted playsinline preload="metadata" poster="img/poster_demo.jpg"></video>
-  <div class="chapters" id="chapters"></div>
-</div></section>
-
 <!-- 2 · ABSTRACT -->
-<section id="abstract"><div class="wrap">
+<section id="abstract" style="border-top:none;padding-top:6px"><div class="wrap">
   <div class="tag" style="color:var(--mut)">Abstract</div>
   <div class="abstract">
     Estimating internal biomechanical variables and muscle fatigue from visual observations remains a significant challenge in biomechanics, rehabilitation, and sports science. Conventional approaches rely on wearable sensors such as electromyography (EMG), inertial measurement units (IMUs), or motion-capture systems, which are often expensive, intrusive, and difficult to deploy outside controlled laboratory environments.
@@ -78,80 +72,13 @@ footer{padding:30px 0;text-align:center;color:var(--mut);font-size:.84rem;border
   </div>
 </div></section>
 
-<!-- 3 · INFO, in the order of the demo -->
-<section><div class="wrap">
-  <div class="tag" style="color:var(--core)">The model</div>
-  <h2>OpenSim Arm26 and the 3CC fatigue model</h2>
-  <img class="fig light" src="img/dg_arm26.png" alt="Arm26 taken, then rebuilt for a loaded curl" loading="lazy">
-  <img class="fig light" src="img/dg_fatigue.png" alt="Three-compartment fatigue model" loading="lazy" style="margin-top:14px">
+<!-- 1 · DEMO -->
+<section id="demo"><div class="wrap">
+  <video id="demovid" src="demo.mp4" controls muted playsinline preload="metadata" poster="img/poster_demo.jpg"></video>
+  <div class="chapters" id="chapters"></div>
 </div></section>
 
-<section><div class="wrap">
-  <div class="tag" style="color:var(--r1)">Vision · four cameras</div>
-  <h2>Pose2Sim, extended</h2>
-  <img class="fig light" src="img/dg_fork_pose2sim.png" alt="Pose2Sim: shared front end, own biomechanics" loading="lazy">
-  <div class="arrow">↓</div>
-  <div class="grid2" style="margin-top:0">
-    <img class="fig" src="banner.gif" alt="RTMPose on four cameras" loading="lazy">
-    <video src="blender.mp4" controls muted loop playsinline preload="none" poster="img/blender_check.jpg"></video>
-  </div>
-  <p class="cap">RTMPose on the four views · Blender: the reconstructed skeleton laid back on every camera.</p>
-</div></section>
-
-<section><div class="wrap">
-  <div class="tag" style="color:var(--r2)">Vision · one camera</div>
-  <h2>OpenCap Monocular, forked</h2>
-  <img class="fig light" src="img/dg_fork_opencap.png" alt="OpenCap Monocular: shared front end, own biomechanics" loading="lazy">
-</div></section>
-
-<section><div class="wrap">
-  <div class="tag" style="color:var(--core)">OpenSim results</div>
-  <h2>13 signals for the four elbow flexors</h2>
-  <img class="fig" src="img/results_opensim.jpg" alt="Elbow torque, muscle activation, muscle force and muscle fatigue for BIClong, BICshort, BRA and BRD" loading="lazy">
-  <p class="cap">Elbow torque (Inverse Dynamics), activation and force (Static Optimization), fatigue (3CC) — one biceps curl with 2 kg.</p>
-</div></section>
-
-<section><div class="wrap">
-  <div class="tag" style="color:var(--r1)">AI · multi-camera</div>
-  <h2>Replacing OpenSim with LightGBM</h2>
-  <img class="fig light" src="img/dg_ai_multi.png" alt="Multi-camera classical pipeline and the three AI entry points" loading="lazy" style="max-width:820px;margin:0 auto">
-  <div class="grid2">
-    <img class="fig" src="img/r2_multi.jpg" alt="Approaches A, B and C: R², end-to-end time and AI inference time" loading="lazy">
-    <img class="fig" src="img/bench_multi.jpg" alt="Nine models compared" loading="lazy">
-  </div>
-  <img class="fig" src="img/gt_multi.jpg" alt="LightGBM output against the OpenSim ground truth on an unseen subject" loading="lazy" style="margin-top:16px">
-</div></section>
-
-<section><div class="wrap">
-  <div class="tag" style="color:var(--r2)">AI · single camera</div>
-  <h2>Replacing OpenSim with a BiGRU — and why Level 3</h2>
-  <img class="fig light" src="img/dg_ai_single.png" alt="Single-camera classical pipeline and the three AI entry levels" loading="lazy" style="max-width:820px;margin:0 auto">
-  <div class="grid2">
-    <img class="fig" src="img/r2_single.jpg" alt="Levels 1, 2 and 3: R², time per trial and GPU; level 3 chosen" loading="lazy">
-    <img class="fig" src="img/bench_single.jpg" alt="Eight architectures at three input levels" loading="lazy">
-  </div>
-  <img class="fig" src="img/gt_single.jpg" alt="BiGRU level-3 output against the OpenSim ground truth on an unseen subject" loading="lazy" style="margin-top:16px">
-</div></section>
-
-<section><div class="wrap">
-  <div class="tag" style="color:var(--ok)">What the AI saves</div>
-  <h2>Time and memory</h2>
-  <img class="fig" src="img/gains.jpg" alt="Time and memory saved by the AI" loading="lazy">
-</div></section>
-
-<section><div class="wrap">
-  <div class="tag" style="color:var(--r2)">Application · web + mobile</div>
-  <h2>The clinician on the web, the patient on the phone</h2>
-  <video src="app.mp4" controls muted playsinline preload="none" poster="img/poster_app.jpg"></video>
-  <div class="shots">
-    <figure><img src="img/patient_home.png" alt="Patient home" loading="lazy"><figcaption>Mobile · prescribed exercise</figcaption></figure>
-    <figure><img src="img/patient_record.png" alt="Recording" loading="lazy"><figcaption>Mobile · record, analyse</figcaption></figure>
-    <figure><img src="img/patient_results.png" alt="Results" loading="lazy"><figcaption>Mobile · the 13 signals</figcaption></figure>
-    <figure><img src="img/clinician_review.png" alt="Clinician review" loading="lazy"><figcaption>Web · clinician review</figcaption></figure>
-  </div>
-</div></section>
-
-<div class="more"><a class="btn" href="https://github.com/Idriss-jedid/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction#readme">📖 Method, validation and details — in the README</a></div>
+<div class="more"><a class="btn" href="https://github.com/Idriss-jedid/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction#readme">📖 Method, validation and results — in the README</a></div>
 
 <footer><div class="wrap">
   Built on <a href="https://fit3d.imar.ro/fit3d">Fit3D</a>, <a href="https://zenodo.org/records/7607736">MM-Fit</a>, <a href="https://github.com/perfanalytics/pose2sim">Pose2Sim</a>, <a href="https://arxiv.org/abs/2603.24733">OpenCap Monocular</a> and OpenSim · © Idriss Abderraouf Jedid
