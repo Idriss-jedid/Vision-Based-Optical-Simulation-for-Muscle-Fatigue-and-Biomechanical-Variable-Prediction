@@ -66,7 +66,7 @@ footer{padding:30px 0;text-align:center;color:var(--mut);font-size:.84rem;border
   <div class="abstract">
     Muscle activation, force and fatigue are central to rehabilitation, yet they are usually measured with electromyography, force sensors or marker-based motion capture: equipment that is costly, intrusive and confined to the laboratory. An ordinary RGB camera, by contrast, is available everywhere, but it only records how a limb moves, not how its muscles work.
     <br><br>
-    This work presents a vision-based framework that estimates the internal biomechanics of the upper limb from markerless <b>RGB video</b>, demonstrated on the dumbbell biceps curl. Two routes recover the motion of the arm. The multi-camera route extends <b>Pose2Sim</b>: RTMPose detects 2D keypoints in four calibrated views, which are triangulated into 3D joints. The single-camera route extends <b>OpenCap Monocular</b>: ViTPose and WHAM estimate the 3D body from a single video, which is then aligned with gravity and filtered. In both routes, the shoulder, elbow and wrist give the two joint angles of the arm. Validated against Vicon motion capture, the elbow angle error is 4.2° with four cameras and 6.94° with one camera.
+    This work presents a vision-based framework that estimates the internal biomechanics of the upper limb from markerless <b>RGB video</b>, demonstrated on the dumbbell biceps curl. Two routes recover the motion of the arm. The multi-camera route extends <b>Pose2Sim</b>: RTMPose detects 2D keypoints in four calibrated views, which are triangulated into 3D joints. The single-camera route extends <b>OpenCap Monocular</b>: ViTPose and WHAM estimate the 3D body from a single video, which is then aligned with gravity and filtered. In both routes, the shoulder, elbow and wrist give the two joint angles of the arm. Validated against Vicon motion capture, the elbow angle follows the reference with a correlation of 0.993 in both routes, with a mean error of 6.6° with four cameras and 6.94° with one camera.
     <br><br>
     The recovered motion drives a subject-scaled <b>OpenSim Arm26</b> musculoskeletal model carrying a 2 kg dumbbell. Inverse dynamics, static optimisation and a <b>three-compartment fatigue model</b> produce thirteen time-resolved signals: the elbow torque and the activation, force and fatigue of the four elbow flexors (biceps long and short heads, brachialis and brachioradialis).
     <br><br>
@@ -75,6 +75,31 @@ footer{padding:30px 0;text-align:center;color:var(--mut);font-size:.84rem;border
     This model is integrated into a <b>web and mobile application</b>: the patient records an exercise at home with a phone camera, and the clinician reviews the resulting muscle signals remotely. The framework offers a low-cost, non-contact way to monitor muscle effort and fatigue in rehabilitation. Data are drawn from the <a href="https://fit3d.imar.ro/fit3d">Fit3D</a> and <a href="https://zenodo.org/records/7607736">MM-Fit</a> datasets.
     <div class="kw"><b>Keywords:</b> RGB camera · markerless motion capture · human pose estimation · 3D reconstruction · musculoskeletal modelling · OpenSim · muscle activation · muscle force · muscle fatigue · surrogate model · deep learning · tele-rehabilitation</div>
   </div>
+</div></section>
+
+<!-- 3 · VALIDATION -->
+<section id="validation"><div class="wrap">
+  <div class="tag" style="color:var(--ok)">Validation against Vicon</div>
+  <h2>Our validation pipeline: four tests, both routes pass</h2>
+  <p>Each stage of both pipelines was tested on Fit3D (8 subjects) against Vicon motion capture, with limits fixed before measuring.</p>
+  <img class="fig light" src="img/validation_single.png" alt="Single-camera validation: the four tests">
+  <img class="fig light" src="img/validation_multi.png" alt="Multi-camera validation: the four tests" style="margin-top:16px">
+</div></section>
+
+<!-- 4 · ARCHITECTURE, SINGLE CAMERA -->
+<section id="arch-single"><div class="wrap">
+  <div class="tag" style="color:var(--r2)">Route 2 · single camera</div>
+  <h2>Single-camera architecture</h2>
+  <p>ViTPose and WHAM recover the arm from one video, OpenSim computes the 13 signals, and a BiGRU can replace the chain at three levels. Level 3, from 2D keypoints only, is deployed.</p>
+  <img class="fig light" src="img/ai_single.png" alt="Single-camera pipeline and its three AI entry levels">
+</div></section>
+
+<!-- 5 · ARCHITECTURE, MULTI-CAMERA -->
+<section id="arch-multi"><div class="wrap">
+  <div class="tag" style="color:var(--r1)">Route 1 · four cameras</div>
+  <h2>Multi-camera architecture</h2>
+  <p>RTMPose and triangulation recover the arm from four calibrated views, OpenSim computes the 13 signals, and LightGBM can replace the chain from joint angles, 3D joints or 2D keypoints.</p>
+  <img class="fig light" src="img/ai_multi.png" alt="Multi-camera pipeline and its three AI entry points">
 </div></section>
 
 <!-- 1 · DEMO -->
