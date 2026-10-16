@@ -25,8 +25,8 @@ motion of the arm. The multi-camera route extends Pose2Sim: RTMPose detects 2D k
 calibrated views, which are triangulated into 3D joints. The single-camera route extends OpenCap
 Monocular: ViTPose and WHAM estimate the 3D body from a single video, which is then aligned with
 gravity and filtered. In both routes, the shoulder, elbow and wrist give the two joint angles of the
-arm. Validated against Vicon motion capture, the elbow angle error is 4.2° with four cameras and
-6.94° with one camera.
+arm. Validated against Vicon motion capture, the elbow angle follows the reference with a correlation of
+0.993 in both routes, with a mean error of 6.6° with four cameras and 6.94° with one camera.
 
 The recovered motion drives a subject-scaled OpenSim Arm26 musculoskeletal model carrying a 2 kg
 dumbbell. Inverse dynamics, static optimisation and a three-compartment fatigue model produce
@@ -117,12 +117,17 @@ are kept.
 Each stage was tested on Fit3D (8 subjects) against Vicon motion capture, with thresholds fixed
 before measuring. Both pipelines pass every test.
 
-| Test | Four cameras | One camera | Limit (one camera) |
+| Test | Four cameras | One camera | Limit |
 |---|:---:|:---:|:---:|
-| 2D pose — reprojection | 8.3 px | 7.7 px | < 15 px |
-| 3D joints — error | 27.8 mm | 49.4 mm | < 60 mm |
-| Elbow angle — MAE / correlation | 4.2° / 0.99 | 6.94° / 0.993 | < 10° / > 0.90 |
-| Segment scaling | ×0.85 – 1.05 | ×0.943 (humerus) | 0.85 – 1.15 |
+| T1 · 2D pose — reprojection error | 8.3 px | 7.7 px | < 15 px |
+| T2 · 3D joints — position / arm direction | 27.5 mm / 6.7° | 49.4 mm / 6.6° | < 60 mm |
+| T3 · Elbow angle — correlation / MAE | 0.993 / 6.6° | 0.993 / 6.94° | > 0.90 / < 10° |
+| T4 · Segment scaling — humerus / forearm | ×0.934 / ×0.959 | ×0.943 / ×1.017 | 0.85 – 1.15 |
+
+With four cameras, the per-subject reprojection error ranges from 5.0 px (s04) to 13.5 px (s08) and the
+3D error from 20.6 mm (s11) to 38.2 mm (s08); the elbow-angle correlation stays above 0.99 for every
+subject. The measured segment lengths personalise the Arm26 model (default humerus 0.291 m, forearm
+0.254 m).
 
 <p align="center">
   <img src="figures/singlecam/validation_per_subject.png" width="520" alt="Validation per subject"/>
@@ -152,10 +157,20 @@ load and repetitions as expected (2.7 % to 28.5 % across four conditions).
 
 ## 5. Why an AI surrogate
 
-The pipeline is accurate but heavy. On a single camera, one 35-second recording takes **485 s** —
-ViTPose 195 s, WHAM 260 s, OpenSim 26.7 s — needs a **GPU**, and stores a 137 MB WHAM output plus a
-624 MB OpenSim installation. That is too slow and too large for a clinical app, so a learned model is
-trained to produce the same 13 signals directly.
+The pipeline is accurate but heavy. On a single camera, one 35-second recording takes **485 s**
+(14× real time), needs a **GPU**, and stores a 137 MB WHAM output plus a 624 MB OpenSim installation.
+
+| Stage (one camera) | Time | Share |
+|---|:---:|:---:|
+| 2D pose (ViTPose) | 195 s | 40.2 % |
+| 3D pose (WHAM) | 260 s | 53.6 % |
+| Gravity alignment + filtering | 3 s | 0.6 % |
+| Angles + scaling | 0.2 s | < 0.1 % |
+| OpenSim (ID + SO + 3CC) | 26.7 s | 5.5 % |
+| **Total** | **485 s** | |
+
+That is too slow and too large for a clinical app, so a learned model is trained to produce the same
+13 signals directly.
 
 <p align="center">
   <img src="figures/singlecam/time_per_level.png" width="430" alt="Time per trial: classical pipeline against each AI entry level"/>
@@ -181,16 +196,39 @@ never seen in training).
 
 ### Benchmark and fine-tuning
 
-**Four cameras (8 subjects, leave-one-subject-out).** For each approach: a baseline benchmark of
-tabular and deep models on raw kinematics → feature engineering (velocities, gravity terms and
-cumulative effort, which fatigue depends on) → a 2 Hz filter for 3D joints → Optuna tuning of the four
-best models (40 trials each). Gradient-boosted trees (LightGBM) win in every approach.
+**Four cameras (8 subjects, leave-one-subject-out).** For each approach, ten models (Ridge, Random
+Forest, ExtraTrees, LightGBM, MLP, ANN, 1D-CNN, LSTM, CNN+LSTM, Transformer) go through the same stages:
+a baseline benchmark on raw kinematics → feature engineering (velocities, accelerations, gravity load,
+and cumulative angular path and gravitational impulse, which drive fatigue) → a 2 Hz Butterworth filter
+for 3D joints → Optuna tuning of the four best models (40 trials each).
 
-| Approach | Input | R² | torque | activation | force | fatigue |
-|---|---|:---:|:---:|:---:|:---:|:---:|
-| **A** | joint angles + scaled model | **0.952** | 0.937 | 0.962 | 0.964 | 0.936 |
-| B | 3D joints | 0.904 | 0.827 | 0.922 | 0.916 | 0.893 |
-| C | 2D keypoints (4 views) | 0.860 | 0.782 | 0.873 | 0.881 | 0.845 |
+| Approach | Input | Baseline | + features | + filter | **Final R²** |
+|---|---|:---:|:---:|:---:|:---:|
+| **A** | joint angles + scaled model | 0.920 | 0.950 | — | **0.952** |
+| B | 3D joints | 0.743 | 0.858 | 0.893 | **0.893** |
+| C | 2D keypoints (4 views) | −0.002 | 0.845 | — | **0.847** |
+
+*Best mean R² per stage (LightGBM). In approach C, fusing the four views with confidence weights is what
+turns raw pixels (R² ≈ 0) into usable inputs.*
+
+| Approach | Mean R² | torque | activation | force | fatigue |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **A** | **0.952** | 0.932 | 0.961 | 0.964 | 0.936 |
+| B | 0.893 | 0.835 | 0.903 | 0.895 | 0.897 |
+| C | 0.847 | 0.775 | 0.845 | 0.856 | 0.857 |
+
+Tree ensembles lead every approach. Optuna confirms it (best 3-fold R²: LightGBM 0.946 in A and 0.890
+in B; MLP 0.835 in C). Deep sequence models trained on windows of the same signals match LightGBM on
+torque, activation and force, but not on fatigue, which depends on the whole history of the set:
+
+| Approach A, sequence models | Mean R² | torque | activation | force | fatigue |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **LightGBM (features)** | **0.952** | 0.932 | 0.961 | 0.964 | **0.936** |
+| CNN+LSTM | 0.937 | 0.948 | 0.979 | 0.984 | 0.845 |
+| Transformer | 0.931 | 0.933 | 0.979 | 0.978 | 0.835 |
+| LSTM | 0.931 | 0.947 | 0.978 | 0.981 | 0.829 |
+| BiGRU | 0.925 | 0.964 | 0.982 | 0.987 | 0.796 |
+| 1D-CNN | 0.864 | 0.811 | 0.899 | 0.919 | 0.786 |
 
 <p align="center"><img src="figures/fig_tabular.png" width="420" alt="Tabular model benchmark"/> <img src="figures/fig_deep.png" width="420" alt="Deep model benchmark"/></p>
 
@@ -201,14 +239,15 @@ wins at every level.
 
 | Architecture | Level 1 · angles | Level 2 · 3D joints | Level 3 · 2D keypoints |
 |---|:---:|:---:|:---:|
-| **BiGRU** | **0.984** | **0.956** | **0.938** |
-| Transformer | 0.982 | 0.949 | 0.927 |
-| Informer | 0.981 | 0.947 | 0.920 |
-| FEDformer | 0.980 | 0.945 | 0.917 |
-| TFT-lite | 0.974 | 0.902 | 0.860 |
-| Crossformer | 0.955 | 0.896 | 0.854 |
-| PatchTST | 0.944 | 0.890 | 0.841 |
-| iTransformer | 0.890 | 0.881 | 0.840 |
+| **BiGRU** | **0.9842** | **0.9556** | **0.9376** |
+| Transformer | 0.9815 | 0.9493 | 0.9266 |
+| Informer | 0.9814 | 0.9471 | 0.9196 |
+| FEDformer | 0.9799 | 0.9446 | 0.9174 |
+| TFT-lite | 0.9738 | 0.9019 | 0.8604 |
+| Crossformer | 0.9553 | 0.8962 | 0.8535 |
+| PatchTST | 0.9440 | 0.8898 | 0.8413 |
+| iTransformer | 0.8897 | 0.8809 | 0.8403 |
+| *BiGRU, final 5-fold* | *0.984* | *0.956* | *0.938* |
 
 ### Prediction against OpenSim
 
