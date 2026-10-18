@@ -331,14 +331,6 @@ the end of the set.
 
 <p align="center"><img src="figures/app/app_flow.jpg" width="860" alt="Patient phone application and clinician dashboard"/></p>
 
-The last figure links the curves back to the movement. On the left, the recorded curl with the
-detected shoulder, elbow and wrist. On the right, the predicted elbow torque and biceps activation are
-drawn in step with the video. Their peak (16.7 N·m) falls at the hardest moment of the lift, the one
-where the effort is visible in the video. This is the effort the patient feels, made visible from an
-ordinary camera.
-
-<p align="center"><img src="figures/app/peak_effort.jpg" width="760" alt="The recorded curl beside its predicted torque and activation"/></p>
-
 ---
 
 ## 8. Datasets
