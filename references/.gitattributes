@@ -1,0 +1,2 @@
+# Store every file byte for byte (no line-ending conversion), so MANIFEST.csv checksums match after a clone.
+* -text

@@ -1,0 +1,19 @@
+{
+  "name": "VisionBiomech — Optical Simulation",
+  "short_name": "VisionBiomech",
+  "description": "Multi-camera biomechanics: RTMPose → 3D triangulation → joint mechanics → Level-1 inference.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0e17",
+  "theme_color": "#0a0e17",
+  "categories": ["medical", "health", "utilities"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icons/maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

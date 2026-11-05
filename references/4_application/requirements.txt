@@ -1,0 +1,26 @@
+# Both services. Install into one environment; they run as two processes.
+
+# --- shared ---
+fastapi
+uvicorn[standard]
+python-multipart          # multipart uploads: videos, calibration files
+
+# --- care service: clinical records ---
+sqlmodel                  # ORM over SQLite
+passlib[bcrypt]           # password hashing (pbkdf2_sha256 is the scheme used)
+python-jose[cryptography] # access tokens
+
+# --- analysis service: video -> signals ---
+numpy==1.26.4             # pinned: 2.x changes behaviour the saved models rely on
+pandas
+scipy                     # Butterworth filtering of the 3D trajectories
+opencv-python-headless    # video decoding and Rodrigues rotations
+rtmlib                    # RTMPose 2D pose estimation
+onnxruntime               # CPU inference for RTMPose. GPU: onnxruntime-gpu
+torch                     # the single-camera BiGRU predictor
+joblib                    # loading the multi-camera model bundle
+lightgbm                  # the multi-camera Level-1 model
+
+# --- tests ---
+pytest
+httpx                     # required by fastapi's TestClient

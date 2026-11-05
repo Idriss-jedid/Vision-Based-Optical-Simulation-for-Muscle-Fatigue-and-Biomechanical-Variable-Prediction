@@ -1,0 +1,104 @@
+/* VisionBiomech — native mobile (iOS dark) style. No marketing gradients, no glow. */
+:root{
+  --bg:#000000;
+  --surface:#1c1c1e;
+  --surface-2:#2c2c2e;
+  --hair:#38383a;
+  --sep:#2c2c2e;
+  --txt:#ffffff;
+  --mut:#8e8e93;
+  --mut-2:#636366;
+  --accent:#0a84ff;
+  --green:#30d158;
+  --orange:#ff9f0a;
+  --red:#ff453a;
+  --r-lg:14px;--r-md:12px;--r-sm:9px;
+  --sb:max(8px,env(safe-area-inset-bottom));
+  --wrap:440px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:-apple-system,system-ui,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  background:var(--bg);color:var(--txt);
+  max-width:var(--wrap);margin:0 auto;min-height:100vh;
+  position:relative;overflow-x:hidden;
+  padding-bottom:calc(64px + var(--sb));
+  font-size:17px;line-height:1.4;-webkit-font-smoothing:antialiased;
+}
+
+/* ===== App bar (iOS large title) ===== */
+.appbar{
+  position:sticky;top:0;z-index:30;
+  background:rgba(0,0,0,.82);backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid transparent;
+  padding:12px 18px calc(12px + env(safe-area-inset-top));
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:1.05rem;letter-spacing:-.01em}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.status{font-size:.7rem;font-weight:600;padding:4px 10px;border-radius:100px;background:var(--surface);color:var(--green);border:1px solid transparent}
+.status.off{color:var(--red)}
+
+/* ===== Page ===== */
+.page{display:none;padding:22px 18px}
+.page.on{display:block;animation:none}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.step{font-size:.78rem;font-weight:600;letter-spacing:-.01em;color:var(--accent);margin-bottom:8px}
+.hero{font-size:1.85rem;font-weight:700;letter-spacing:-.035em;line-height:1.1;margin-bottom:22px}
+.sgroup{font-weight:600;font-size:.82rem;color:var(--mut);text-transform:uppercase;letter-spacing:.02em;margin:26px 0 10px;padding:0 4px}
+
+/* ===== Buttons (iOS filled) ===== */
+.btn{display:block;width:100%;border:none;border-radius:var(--r-md);padding:16px;font-family:inherit;font-weight:600;font-size:1.02rem;cursor:pointer;transition:.15s}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.ghost{background:var(--surface);color:var(--accent)}
+.btn:active{opacity:.6}
+.btn:disabled{opacity:.4}
+
+.form-hint{text-align:center;color:var(--mut);font-size:.76rem;margin-top:12px}
+.form-hint .ok{color:var(--green);font-weight:600}
+
+/* ===== Spinner ===== */
+.spin{width:13px;height:13px;border:2px solid rgba(10,132,255,.25);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+.err{display:none;margin-top:14px;background:var(--surface);border-radius:var(--r-md);padding:14px 15px;color:var(--red);font-size:.82rem;line-height:1.5}
+.err code{background:var(--surface-2);padding:2px 6px;border-radius:5px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.74rem;color:var(--accent)}
+
+/* ===== Results (native grouped) ===== */
+#results{display:none;margin-top:24px;animation:up .35s}
+.divider{font-size:.8rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.02em;margin:6px 0 12px;padding:0 4px}
+.accnote{background:var(--surface);border-radius:var(--r-md);padding:13px 15px;color:var(--mut);font-size:.8rem;line-height:1.5;margin-bottom:16px}
+.accnote b{color:var(--txt);font-weight:600}
+
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:18px}
+.kpi{background:var(--surface);border-radius:var(--r-md);padding:14px 4px;text-align:center}
+.kpi .v{font-size:1.4rem;font-weight:700;letter-spacing:-.02em}
+.kpi .v.ac{color:var(--accent)}
+.kpi .v.gn{color:var(--green)}
+.kpi .l{color:var(--mut);font-size:.66rem;margin-top:4px}
+
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.grp{font-weight:600;font-size:.82rem;color:var(--mut);text-transform:uppercase;letter-spacing:.02em;margin:20px 0 10px;padding:0 4px}
+.grp::before{content:""}
+.cc{background:var(--surface);border-radius:var(--r-md);padding:12px 13px 8px}
+.cc.full{grid-column:1/-1}
+.cc .t{display:flex;justify-content:space-between;align-items:baseline}
+.cc h5{font-size:.84rem;font-weight:600}
+.cc .u{color:var(--mut);font-size:.66rem}
+.cc canvas{max-height:96px;margin-top:6px}
+
+/* ===== Bottom nav (iOS tab bar) ===== */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--wrap);z-index:40;background:rgba(28,28,30,.94);backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--hair);display:flex;padding:8px 0 var(--sb)}
+.nav button{flex:1;background:none;border:none;color:var(--mut-2);font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.64rem;font-weight:500;padding:4px 0}
+.nav button .ic svg{display:block}
+.nav button.on{color:var(--accent)}
+.nav button:active{opacity:.6}
+
+/* ===== Soon ===== */
+.soon{text-align:center;padding:64px 24px}
+.soon .lock{font-size:2.8rem;margin-bottom:16px;opacity:.4}
+.soon h2{font-size:1.4rem;font-weight:700;margin-bottom:6px;letter-spacing:-.02em}
+.soon .tag{display:inline-block;background:var(--surface);color:var(--orange);font-weight:600;font-size:.76rem;padding:7px 16px;border-radius:100px;margin:14px 0}
+.soon p{color:var(--mut);font-size:.88rem;max-width:300px;margin:6px auto;line-height:1.55}

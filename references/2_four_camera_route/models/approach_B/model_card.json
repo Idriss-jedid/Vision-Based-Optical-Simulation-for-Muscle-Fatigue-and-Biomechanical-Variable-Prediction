@@ -1,0 +1,45 @@
+{
+  "model": "LightGBM (MultiOutput) - 3D vision-only (Butterworth FE + Optuna)",
+  "input": "3D joints RShoulder/RElbow/RWrist (.trc) -> 30 engineered features",
+  "output": [
+    "elbow_moment",
+    "act_BIClong",
+    "act_BICshort",
+    "act_BRA",
+    "act_BRD_hand",
+    "frc_BIClong",
+    "frc_BICshort",
+    "frc_BRA",
+    "frc_BRD_hand",
+    "MF_BIClong",
+    "MF_BICshort",
+    "MF_BRA",
+    "MF_BRD_hand"
+  ],
+  "hyperparams": {
+    "n_estimators": 306,
+    "num_leaves": 43,
+    "learning_rate": 0.12,
+    "subsample": 0.698,
+    "colsample_bytree": 0.893,
+    "min_child_samples": 16
+  },
+  "validation": "LOSO 8 subjects",
+  "loso_mean_R2": 0.904,
+  "note": "no Vicon, no OpenSim at inference",
+  "loso_metrics": {
+    "elbow_moment": 0.8267,
+    "act_BIClong": 0.9072,
+    "act_BICshort": 0.9424,
+    "act_BRA": 0.9315,
+    "act_BRD_hand": 0.9064,
+    "frc_BIClong": 0.9107,
+    "frc_BICshort": 0.9344,
+    "frc_BRA": 0.9236,
+    "frc_BRD_hand": 0.8952,
+    "MF_BIClong": 0.9609,
+    "MF_BICshort": 0.9382,
+    "MF_BRA": 0.7161,
+    "MF_BRD_hand": 0.9547
+  }
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0e17">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="Single-camera biomechanics: RTMPose 2D pose to a recurrent model, on one ordinary phone video.">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="apple-touch-icon" href="/icons/icon.svg">
+<title>VisionBiomech</title>
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/css/fit.css">
+</head>
+<body>
+
+<div class="appbar">
+  <div class="brand"><span class="dot"></span> VisionBiomech</div>
+  <span class="status" id="bstat">connecting…</span>
+  <button id="rh_out" hidden
+          style="margin-left:8px;border:0;cursor:pointer;font:inherit;font-size:.72rem;
+                 font-weight:700;padding:6px 13px;border-radius:100px;
+                 background:#e9edf7;color:#3446c9">Sign out</button>
+</div>
+
+<main class="page fit on" id="p1">
+  <div class="fit-hero">
+    <div class="fit-kick">SINGLE CAMERA · LEVEL&nbsp;3</div>
+    <h2 class="fit-title">Analyze your curl</h2>
+    <p class="fit-sub">One phone video → muscle forces, activations &amp; fatigue.<br>2D pose only · no calibration.</p>
+  </div>
+
+  <div class="fit-sec">Your recording</div>
+  <div class="fit-upload" id="s_slot">
+    <video id="sv" muted loop playsinline></video><canvas id="sk"></canvas>
+    <div class="fit-ph" id="s_ph">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      <span>Tap to add a video</span>
+      <small>side view of a dumbbell biceps curl</small>
+    </div>
+    <span class="fit-rm" id="s_rm" hidden>×</span>
+  </div>
+  <input type="file" id="sfile" accept="video/mp4,video/quicktime,video/*" hidden>
+
+  <button class="fit-btn" id="srun" disabled>Analyze movement</button>
+  <button class="fit-btn ghost" id="srecord" style="margin-top:10px">📹 Record with camera</button>
+  <p class="fit-hint" id="s_hint">Upload a video, or record one with your camera</p>
+
+  <div id="sproc" class="fit-proc">
+    <div class="fit-proc-h">Processing <span class="fit-proc-s">on-device pipeline</span></div>
+    <div class="fit-stage" data-s="0"><div class="fsi">1</div><div><div class="fst">RTMPose · 2D pose</div><div class="fsd">shoulder · elbow · wrist per frame</div></div></div>
+    <div class="fit-stage" data-s="1"><div class="fsi">2</div><div><div class="fst">AI inference · Level 3</div><div class="fsd">BiGRU → 13 biomechanics signals</div></div></div>
+  </div>
+  <div class="err" id="serr"></div>
+
+  <div id="sresults" class="fit-results">
+    <div class="fit-card fit-muscle">
+      <div class="fit-card-h">Muscles involved <span class="fit-badge" id="m_badge">4 elbow flexors</span></div>
+      <div class="fit-arm">
+        <svg viewBox="0 0 220 150" id="armsvg" xmlns="http://www.w3.org/2000/svg">
+          <path id="a_upper" class="seg" d="M40 40 L110 70" />
+          <path id="a_fore"  class="seg" d="M110 70 L170 40" />
+          <ellipse id="m_bic" class="musc" cx="72" cy="53" rx="26" ry="12" transform="rotate(24 72 53)"/>
+          <ellipse id="m_bra" class="musc" cx="95" cy="66" rx="18" ry="8" transform="rotate(24 95 66)"/>
+          <ellipse id="m_brd" class="musc" cx="140" cy="55" rx="22" ry="9" transform="rotate(-27 140 55)"/>
+          <circle class="joint" cx="40" cy="40" r="5"/><circle class="joint" cx="110" cy="70" r="6"/><circle class="joint" cx="170" cy="40" r="5"/>
+          <text x="34" y="30" class="jlab">shoulder</text><text x="150" y="30" class="jlab">wrist</text><text x="98" y="90" class="jlab">elbow</text>
+        </svg>
+      </div>
+      <div class="fit-mlist" id="m_list"></div>
+    </div>
+
+    <div class="fit-dash">
+      <div class="fit-stat"><div class="fsv" id="d_torque">–</div><div class="fsl">Peak torque</div><div class="fsu">N·m</div></div>
+      <div class="fit-stat"><div class="fsv" id="d_force">–</div><div class="fsl">Peak force</div><div class="fsu">N</div></div>
+      <div class="fit-stat"><div class="fsv" id="d_act">–</div><div class="fsl">Mean activation</div><div class="fsu">0–1</div></div>
+      <div class="fit-stat"><div class="fsv" id="d_fat">–</div><div class="fsl">End fatigue</div><div class="fsu">%</div></div>
+    </div>
+
+    <div class="fit-card">
+      <div class="fit-card-h">Signals over time <span class="fit-badge alt" id="s_r2">R² 95.5%</span></div>
+      <div id="scharts"></div>
+    </div>
+    <div class="fit-note">Single-camera Level-3: <b>RTMPose-s</b> 2D → BiGRU → 13 signals. No calibration, no 3D. The predictor was trained on <b>ViTPose</b> keypoints, so the R² shown is its validated accuracy with that detector — not a measurement of this configuration.</div>
+    <button class="fit-btn ghost" id="sagain">Analyze another recording</button>
+  </div>
+</main>
+
+<nav class="nav"></nav>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+<script src="/js/app.js" defer></script>
+<script src="/js/rehab.js" defer></script>
+<script>
+/* Optional demo preload of the sample videos — opt-in with ?demo in the URL. */
+if (location.search.indexOf('demo') >= 0) {
+  const loadBlob = async (name) => new File([await (await fetch('/videos/' + name + '.mp4')).blob()],
+                                            name + '.mp4', { type: 'video/mp4' });
+  window.addEventListener('load', () => setTimeout(async () => {
+    try { setSingle(await loadBlob('cam_50591643')); } catch (e) { console.log('demo load failed', e); }
+  }, 500));
+}
+</script>
+</body>
+</html>

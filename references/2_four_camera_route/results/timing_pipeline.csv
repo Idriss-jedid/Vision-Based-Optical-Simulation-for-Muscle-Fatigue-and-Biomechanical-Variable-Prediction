@@ -1,0 +1,12 @@
+stage,seconds,note
+Calibration,1.0,conversion JSON->toml (approx)
+2D pose (RTMPose),103.0,from log
+Triangulation,38.0,from log
+Filtering,2.0,Butterworth on 3D (approx)
+Stage C: scaling (.osim),0.0475,OpenSim scale
+Stage B: angles (.mot),0.0423,geometry from .trc
+OpenSim Inverse Dynamics,0.2198,
+OpenSim Static Optimization,84.3531,le plus lent
+OpenSim 3CC (fatigue),4.0841,
+AI inference (3D model),0.0998,predict 1759 frames -> 0.057 ms/frame
+AI inference (Approach A),0.3596,predict 1759 frames -> 0.204 ms/frame

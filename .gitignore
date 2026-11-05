@@ -12,6 +12,7 @@
 !/dataset/
 !/figures/
 !/media/
+!/references/
 
 # generic noise (any level)
 __pycache__/

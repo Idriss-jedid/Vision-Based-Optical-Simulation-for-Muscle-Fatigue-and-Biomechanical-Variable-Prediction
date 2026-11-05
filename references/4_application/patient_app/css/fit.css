@@ -1,0 +1,124 @@
+/* ============================================================
+   SINGLE-CAMERA · LEVEL 3  — light blue/white fitness theme
+   (scoped to .fit so the dark multi-cam page is untouched)
+   ============================================================ */
+.page.fit{
+  --fbg:#eef1f8; --fcard:#ffffff; --fink:#151b2e; --fmut:#7580a0;
+  --fblue:#3b5bdb; --fblue-2:#5c7cff; --fblue-d:#2942b8;
+  --fgreen:#1fbf75; --forange:#f5a524; --fpurple:#8a5cf6;
+  background:var(--fbg); color:var(--fink);
+  min-height:100vh; padding:0 0 90px;
+}
+.page.fit .fit-sec{font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--fmut);margin:20px 18px 10px}
+
+/* hero */
+.fit-hero{
+  background:linear-gradient(135deg,#3b5bdb 0%,#2942b8 100%);
+  color:#fff;padding:26px 20px 30px;border-radius:0 0 26px 26px;
+  box-shadow:0 8px 24px rgba(59,91,219,.25);
+}
+.fit-kick{font-size:.68rem;font-weight:700;letter-spacing:.14em;opacity:.85;margin-bottom:8px}
+.fit-title{font-size:1.9rem;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.fit-sub{font-size:.86rem;opacity:.92;margin-top:8px;line-height:1.45}
+
+/* upload slot */
+.fit-upload{
+  position:relative;margin:0 18px;aspect-ratio:16/10;border-radius:18px;overflow:hidden;
+  background:#fff;border:2px dashed #c7d0ea;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 4px 16px rgba(21,27,46,.06);transition:.15s;
+}
+.fit-upload.has{border-style:solid;border-color:#3b5bdb}
+.fit-upload:active{transform:scale(.99)}
+.fit-upload video,.fit-upload canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fit-upload canvas{pointer-events:none}
+.fit-ph{display:flex;flex-direction:column;align-items:center;gap:7px;color:#9aa6c8;text-align:center;padding:14px}
+.fit-ph span{font-weight:600;font-size:.92rem;color:#151b2e}
+.fit-ph small{font-size:.74rem;color:#7580a0}
+.fit-rm{position:absolute;top:9px;right:11px;z-index:6;width:26px;height:26px;border-radius:50%;background:rgba(21,27,46,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;backdrop-filter:blur(6px);cursor:pointer}
+.fit-livetag{position:absolute;bottom:9px;left:11px;z-index:6;display:flex;align-items:center;gap:6px;font-size:.62rem;font-weight:700;color:#fff;background:rgba(59,91,219,.92);padding:4px 9px;border-radius:100px}
+.fit-livetag i{width:6px;height:6px;border-radius:50%;background:#fff;animation:fpulse 1.3s infinite}
+@keyframes fpulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* button */
+.fit-btn{
+  display:block;width:calc(100% - 36px);margin:16px 18px 0;padding:16px;border:none;border-radius:15px;
+  background:#3b5bdb;color:#fff;font-weight:700;font-size:1rem;cursor:pointer;
+  box-shadow:0 6px 18px rgba(59,91,219,.32);transition:.15s;
+}
+.fit-btn:active{transform:translateY(1px)}
+.fit-btn:disabled{background:#c3cbe4;box-shadow:none;cursor:default}
+.fit-btn.ghost{background:transparent;color:#3b5bdb;box-shadow:none;border:1.5px solid #c7d0ea}
+.fit-hint{text-align:center;color:#7580a0;font-size:.78rem;margin:9px 18px 0}
+
+/* processing */
+.fit-proc{display:none;margin:20px 18px 0;background:#fff;border-radius:16px;padding:16px;box-shadow:0 4px 16px rgba(21,27,46,.06)}
+.fit-proc.on{display:block}
+.fit-proc-h{font-weight:700;font-size:.95rem;margin-bottom:12px}
+.fit-proc-s{font-weight:500;font-size:.72rem;color:#7580a0;margin-left:6px}
+.fit-stage{display:flex;align-items:center;gap:12px;padding:9px 0}
+.fsi{width:28px;height:28px;border-radius:50%;background:#eef1fb;color:#3b5bdb;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0}
+.fit-stage.act .fsi{background:#3b5bdb;color:#fff}
+.fit-stage.done .fsi{background:#1fbf75;color:#fff}
+.fst{font-weight:600;font-size:.9rem}
+.fsd{font-size:.74rem;color:#7580a0}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* results */
+.fit-results{display:none;padding:4px 18px 0}
+.fit-results.on{display:block}
+.fit-card{background:#fff;border-radius:18px;padding:16px;margin-top:16px;box-shadow:0 4px 16px rgba(21,27,46,.06)}
+.fit-card-h{display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:1rem;margin-bottom:8px}
+.fit-badge{font-size:.66rem;font-weight:700;color:#3b5bdb;background:#eaeefc;padding:4px 10px;border-radius:100px}
+.fit-badge.alt{color:#1fbf75;background:#e5f7ef}
+
+/* muscle diagram */
+.fit-arm{display:flex;justify-content:center;padding:6px 0 2px}
+.fit-arm svg{width:100%;max-width:280px;height:auto}
+.fit-arm .seg{stroke:#c8d0e6;stroke-width:8;stroke-linecap:round;fill:none}
+.fit-arm .joint{fill:#3b5bdb}
+.fit-arm .jlab{font-size:8px;fill:#9aa6c8;font-family:system-ui;font-weight:600}
+.fit-arm .musc{fill:#cfd7ee;transition:fill .5s;opacity:.92}
+.fit-mlist{margin-top:10px;display:flex;flex-direction:column;gap:9px}
+.fit-mrow{display:grid;grid-template-columns:74px 1fr 44px;align-items:center;gap:9px}
+.fit-mrow .mn{font-size:.78rem;font-weight:600}
+.fit-mbar{height:8px;border-radius:100px;background:#eef1f8;overflow:hidden}
+.fit-mbar i{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,#5c7cff,#3b5bdb);transition:width .6s}
+.fit-mrow .mv{font-size:.74rem;font-weight:700;color:#3b5bdb;text-align:right}
+
+/* dashboard */
+.fit-dash{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.fit-stat{background:#fff;border-radius:16px;padding:15px;box-shadow:0 4px 16px rgba(21,27,46,.06)}
+.fsv{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;color:#3b5bdb;line-height:1}
+.fsl{font-size:.78rem;color:#151b2e;font-weight:600;margin-top:6px}
+.fsu{font-size:.68rem;color:#7580a0}
+
+/* charts inside fit */
+.fit .cc{background:transparent;padding:8px 0}
+.fit .cc h5{font-size:.82rem;font-weight:600;color:#151b2e}
+.fit .cc .u{font-size:.68rem;color:#7580a0}
+.fit .grp{font-weight:700;font-size:.82rem;margin:14px 0 4px;color:#151b2e}
+#charts canvas,#scharts canvas{max-height:124px}
+.fit-note{font-size:.72rem;color:#7580a0;line-height:1.5;margin-top:16px;background:#f6f8fd;border-radius:12px;padding:12px}
+
+/* ============================================================
+   GLOBAL blue/white theme ? restyles the whole app incl. the
+   multi-camera page (which is built entirely on CSS variables)
+   ============================================================ */
+:root{
+  --bg:#eef1f8; --surface:#ffffff; --surface-2:#eef2fb; --hair:#e2e7f2; --sep:#eef1f8;
+  --txt:#151b2e; --mut:#7580a0; --mut-2:#9aa6c8;
+  --accent:#3b5bdb; --green:#1fbf75; --orange:#f5a524; --red:#e5484d;
+}
+body{background:#eef1f8;color:#151b2e}
+.appbar{background:rgba(238,241,248,.86)!important;border-bottom:1px solid #e2e7f2}
+.brand{color:#151b2e}
+.nav{background:rgba(255,255,255,.97)!important;border-top:1px solid #e6ebf5}
+.status{background:#fff;box-shadow:0 1px 4px rgba(21,27,46,.05)}
+.slot,.calib,.cc,.kpi{box-shadow:0 3px 12px rgba(21,27,46,.06)}
+.btn.primary{box-shadow:0 6px 18px rgba(59,91,219,.28)}
+.btn.ghost{border:1.5px solid #d8deee}
+.hero{color:#151b2e}
+.divider{color:#7580a0}
+/* record-button active state (single cam) */
+.fit-btn.rec{background:#e5484d;box-shadow:0 6px 18px rgba(229,72,77,.32)}

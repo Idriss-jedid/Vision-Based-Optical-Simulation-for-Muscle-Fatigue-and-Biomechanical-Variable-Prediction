@@ -1,0 +1,309 @@
+\chapter{Detailed Single-Camera Results}
+\label{app:sc}
+
+The single-camera chapter tabulates the top five of the eighteen architectures at
+each level, and the retained Optuna trial. This appendix gives the complete
+benchmarks and the per-architecture searches behind them.
+
+\section{Validation --- the four tests in full}
+
+One table per test, in the order they attach to the monocular
+pipeline.
+
+\begin{table}[H]
+\centering
+\caption{Test 1 --- 2D reprojection error (ViTPose), per camera.}
+\label{tab:sc:t1}
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Subject} & \textbf{cam 60457274} & \textbf{cam 65906101} & \textbf{Mean} \\
+\midrule
+\texttt{s03} & 7.0 & 7.5 & 7.3~\ok \\
+\texttt{s04} & 3.8 & 4.1 & 3.9~\ok \\
+\texttt{s05} & 8.8 & 9.6 & 9.2~\ok \\
+\texttt{s07} & 8.5 & 11.1 & 9.8~\ok \\
+\texttt{s08} & 13.3 & 12.0 & 12.7~\ok \\
+\texttt{s09} & 8.7 & 8.9 & 8.8~\ok \\
+\texttt{s10} & 5.0 & 5.0 & 5.0~\ok \\
+\texttt{s11} & 5.1 & 4.5 & 4.8~\ok \\
+\midrule
+\textbf{Mean} & \textbf{7.5} & \textbf{7.8} & \textbf{7.7}~\ok \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Test 2 --- 3D reconstruction against Vicon.}
+\label{tab:sc:t2}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Subject} & \textbf{RMSE 3D (\si{\milli\metre})} &
+\textbf{$\text{dir}_{3D}$ (\si{\degree})} \\
+\midrule
+\texttt{s03} & 57.6~\ok & 6.1~\ok \\
+\texttt{s04} & 41.3~\ok & 6.2~\ok \\
+\texttt{s05} & 47.0~\ok & 5.3~\ok \\
+\texttt{s07} & 45.2~\ok & 7.0~\ok \\
+\texttt{s08} & 51.4~\ok & 7.9~\ok \\
+\texttt{s09} & 43.7~\ok & 7.8~\ok \\
+\texttt{s10} & 57.8~\ok & 6.2~\ok \\
+\texttt{s11} & 51.4~\ok & 6.0~\ok \\
+\midrule
+\textbf{Mean} & \textbf{49.4}~\ok & \textbf{6.6}~\ok \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Test 3 --- joint angles against Vicon, averaged over the two cameras of
+each subject.}
+\label{tab:sc:t3}
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Subject} & \textbf{elbow $r$} & \textbf{elbow MAE (\si{\degree})} &
+\textbf{shoulder MAE (\si{\degree})} \\
+\midrule
+\texttt{s03} & 0.99~\ok & 4.92~\ok & 3.16~\ok \\
+\texttt{s04} & 0.99~\ok & 6.67~\ok & 3.92~\ok \\
+\texttt{s05} & 0.99~\ok & 4.38~\ok & 5.06~\ok \\
+\texttt{s07} & 0.99~\ok & 8.64~\ok & 2.56~\ok \\
+\texttt{s08} & 0.99~\ok & 10.09~\warn & 6.50~\ok \\
+\texttt{s09} & 0.99~\ok & 8.48~\ok & 3.67~\ok \\
+\texttt{s10} & 0.99~\ok & 4.26~\ok & 5.04~\ok \\
+\texttt{s11} & 1.00~\ok & 8.04~\ok & 1.46~\ok \\
+\midrule
+\textbf{Mean} & \textbf{0.993}~\ok & \textbf{6.94}~\ok & \textbf{3.92}~\ok \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Test 4 --- subject scaling. \textit{Arm26} scale factors from the
+monocular reconstruction, with the blended humerus estimator.}
+\label{tab:sc:t4}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Subject} & \textbf{$\times$ humerus} & \textbf{$\times$ forearm} \\
+\midrule
+\texttt{s03} & 0.95~\ok & 1.02~\ok \\
+\texttt{s04} & 0.94~\ok & 1.03~\ok \\
+\texttt{s05} & 0.93~\ok & 1.01~\ok \\
+\texttt{s07} & 0.93~\ok & 1.00~\ok \\
+\texttt{s08} & 0.94~\ok & 1.00~\ok \\
+\texttt{s09} & 0.94~\ok & 1.01~\ok \\
+\texttt{s10} & 0.97~\ok & 1.05~\ok \\
+\texttt{s11} & 0.95~\ok & 1.02~\ok \\
+\midrule
+\textbf{Mean} & \textbf{0.943}~\ok & \textbf{1.017}~\ok \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Complete architecture benchmarks}
+
+Subject-grouped cross-validation, overall R\textsuperscript{2} and the four target
+groups. Level 1 is reported in the chapter; these are Levels 2 and 3.
+
+\begin{table}[H]
+\centering
+\caption{Level 2 --- all eighteen architectures on the 3D arm joints.}
+\label{tab:app:l2zoo}
+\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Model} & \textbf{overall} & \textbf{torque} & \textbf{activation} &
+\textbf{force} & \textbf{fatigue} \\
+\midrule
+BiGRU           & \textbf{0.953} & 0.914 & 0.945 & 0.949 & 0.975 \\
+FEDformer       & 0.946 & 0.909 & 0.937 & 0.944 & 0.968 \\
+Informer        & 0.945 & 0.905 & 0.934 & 0.936 & 0.976 \\
+Transformer     & 0.945 & 0.908 & 0.934 & 0.937 & 0.974 \\
+Koopformer      & 0.942 & 0.904 & 0.929 & 0.932 & 0.976 \\
+TCN             & 0.934 & 0.877 & 0.912 & 0.928 & 0.976 \\
+Spacetimeformer & 0.931 & 0.894 & 0.912 & 0.920 & 0.971 \\
+Triformer       & 0.931 & 0.895 & 0.923 & 0.929 & 0.949 \\
+MLP             & 0.929 & 0.883 & 0.919 & 0.913 & 0.968 \\
+Pyraformer      & 0.926 & 0.885 & 0.910 & 0.917 & 0.961 \\
+TimeXer         & 0.924 & 0.876 & 0.914 & 0.923 & 0.946 \\
+TimesNet        & 0.916 & 0.868 & 0.902 & 0.904 & 0.953 \\
+TFT-lite        & 0.906 & 0.857 & 0.887 & 0.897 & 0.948 \\
+Autoformer      & 0.898 & 0.881 & 0.889 & 0.896 & 0.913 \\
+PatchTST        & 0.829 & 0.739 & 0.784 & 0.789 & 0.937 \\
+Crossformer     & 0.820 & 0.751 & 0.795 & 0.782 & 0.902 \\
+iTransformer    & 0.765 & 0.642 & 0.724 & 0.752 & 0.850 \\
+NonStationary   & 0.607 & 0.813 & 0.851 & 0.868 & \textbf{0.052} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Level 3 --- all eighteen architectures on the 2D arm keypoints.}
+\label{tab:app:l3zoo}
+\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Model} & \textbf{overall} & \textbf{torque} & \textbf{activation} &
+\textbf{force} & \textbf{fatigue} \\
+\midrule
+BiGRU           & \textbf{0.942} & 0.897 & 0.935 & 0.939 & 0.964 \\
+FEDformer       & 0.938 & 0.894 & 0.930 & 0.939 & 0.956 \\
+Informer        & 0.927 & 0.871 & 0.914 & 0.920 & 0.960 \\
+Transformer     & 0.923 & 0.867 & 0.902 & 0.914 & 0.967 \\
+Koopformer      & 0.922 & 0.861 & 0.903 & 0.914 & 0.963 \\
+TimeXer         & 0.917 & 0.864 & 0.909 & 0.916 & 0.941 \\
+Triformer       & 0.914 & 0.865 & 0.904 & 0.912 & 0.939 \\
+TCN             & 0.914 & 0.859 & 0.891 & 0.899 & 0.965 \\
+TimesNet        & 0.914 & 0.857 & 0.904 & 0.911 & 0.941 \\
+Pyraformer      & 0.913 & 0.853 & 0.900 & 0.909 & 0.944 \\
+TFT-lite        & 0.909 & 0.858 & 0.893 & 0.898 & 0.949 \\
+Autoformer      & 0.904 & 0.869 & 0.892 & 0.900 & 0.929 \\
+Spacetimeformer & 0.901 & 0.829 & 0.869 & 0.888 & 0.963 \\
+MLP             & 0.845 & 0.752 & 0.791 & 0.814 & 0.954 \\
+Crossformer     & 0.793 & 0.711 & 0.805 & 0.811 & 0.782 \\
+PatchTST        & 0.782 & 0.671 & 0.702 & 0.756 & 0.916 \\
+iTransformer    & 0.702 & 0.529 & 0.658 & 0.683 & 0.807 \\
+NonStationary   & 0.558 & 0.787 & 0.848 & 0.856 & \textbf{$-0.089$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The \texttt{NonStationary} row is worth reading in both tables. Its
+instantaneous groups are respectable --- torque \num{0.813} at Level 2 --- while
+its fatigue collapses to \num{0.052}, and to $-\num{0.089}$ at Level 3. Its
+de-stationarisation step removes exactly the slow drift that fatigue \emph{is}.
+
+\section{Per-architecture Optuna, $8\times40$ trials}
+
+Each of the eight candidate architectures received its own 40-trial study
+($8\times40=320$ trials per level), subject-grouped three-fold, best overall
+R\textsuperscript{2}.
+
+\begin{table}[H]
+\centering
+\caption{Best value reached by each architecture at each pose level. The ranking
+is stable across levels, which is what allows the level effect and the
+architecture effect to be read separately.}
+\label{tab:app:8x40}
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Architecture} & \textbf{Level 1} & \textbf{Level 2} & \textbf{Level 3} \\
+\midrule
+BiGRU        & \textbf{0.9842} & \textbf{0.9556} & \textbf{0.9376} \\
+Transformer  & 0.9815 & 0.9493 & 0.9266 \\
+Informer     & 0.9814 & 0.9471 & 0.9196 \\
+FEDformer    & 0.9799 & 0.9446 & 0.9174 \\
+TFT-lite     & 0.9738 & 0.9019 & 0.8604 \\
+Crossformer  & 0.9553 & 0.8962 & 0.8535 \\
+PatchTST     & 0.9440 & 0.8898 & 0.8413 \\
+iTransformer & 0.8897 & 0.8809 & 0.8403 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Optuna trials, level by level}
+
+Every trial of the joint search is a BiGRU: the sampler never left that
+family once it had found it. The tables below are the top eight of the 45
+trials at each level.
+
+\begin{table}[H]
+\centering
+\caption{Level 1 --- joint angles --- top eight of 45 Optuna trials, ranked by subject-grouped three-fold R\textsuperscript{2}. All are BiGRU.}
+\label{tab:app:sctrialsL1}
+\scriptsize
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+\textbf{rank} & \textbf{CV R\textsuperscript{2}} & \textbf{$d$} & \textbf{layers} & \textbf{dropout} & \textbf{lr} & \textbf{wd} & \textbf{$W$} & \textbf{batch} \\
+\midrule
+\textbf{\#1} & \textbf{0.9834} & 128 & 3 & 0.042 & 0.0033 & 0.00039 & 64 & 32 \\
+\#2 & 0.9829 & 256 & 3 & 0.233 & 0.0017 & 0.00005 & 96 & 32 \\
+\#3 & 0.9826 & 128 & 3 & 0.040 & 0.0035 & 0.00040 & 96 & 32 \\
+\#4 & 0.9826 & 128 & 3 & 0.043 & 0.0033 & 0.00021 & 96 & 32 \\
+\#5 & 0.9823 & 128 & 3 & 0.101 & 0.0035 & 0.00010 & 96 & 32 \\
+\#6 & 0.9822 & 128 & 3 & 0.043 & 0.0035 & 0.00041 & 96 & 32 \\
+\#7 & 0.9821 & 128 & 3 & 0.162 & 0.0040 & 0.00007 & 96 & 32 \\
+\#8 & 0.9818 & 128 & 3 & 0.213 & 0.0029 & 0.00002 & 96 & 32 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Level 2 --- 3D joints --- top eight of 45 Optuna trials, ranked by subject-grouped three-fold R\textsuperscript{2}. All are BiGRU.}
+\label{tab:app:sctrialsL2}
+\scriptsize
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+\textbf{rank} & \textbf{CV R\textsuperscript{2}} & \textbf{$d$} & \textbf{layers} & \textbf{dropout} & \textbf{lr} & \textbf{wd} & \textbf{$W$} & \textbf{batch} \\
+\midrule
+\textbf{\#1} & \textbf{0.9549} & 192 & 2 & 0.182 & 0.0014 & 0.00004 & 64 & 64 \\
+\#2 & 0.9538 & 256 & 2 & 0.178 & 0.0021 & 0.00003 & 128 & 64 \\
+\#3 & 0.9536 & 192 & 4 & 0.283 & 0.0018 & 0.00001 & 96 & 32 \\
+\#4 & 0.9524 & 192 & 4 & 0.162 & 0.0021 & 0.00002 & 96 & 64 \\
+\#5 & 0.9522 & 192 & 4 & 0.206 & 0.0021 & 0.00001 & 96 & 64 \\
+\#6 & 0.9521 & 192 & 3 & 0.211 & 0.0014 & 0.00002 & 96 & 64 \\
+\#7 & 0.9520 & 192 & 3 & 0.212 & 0.0014 & 0.00002 & 96 & 64 \\
+\#8 & 0.9518 & 192 & 3 & 0.272 & 0.0015 & 0.00003 & 96 & 64 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Level 3 --- 2D keypoints --- top eight of 45 Optuna trials, ranked by subject-grouped three-fold R\textsuperscript{2}. All are BiGRU.}
+\label{tab:app:sctrialsL3}
+\scriptsize
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+\textbf{rank} & \textbf{CV R\textsuperscript{2}} & \textbf{$d$} & \textbf{layers} & \textbf{dropout} & \textbf{lr} & \textbf{wd} & \textbf{$W$} & \textbf{batch} \\
+\midrule
+\textbf{\#1} & \textbf{0.9449} & 256 & 3 & 0.222 & 0.0038 & 0.00016 & 128 & 64 \\
+\#2 & 0.9438 & 256 & 4 & 0.234 & 0.0018 & 0.00060 & 192 & 64 \\
+\#3 & 0.9428 & 256 & 4 & 0.198 & 0.0017 & 0.00000 & 192 & 64 \\
+\#4 & 0.9410 & 256 & 5 & 0.242 & 0.0017 & 0.00000 & 192 & 64 \\
+\#5 & 0.9407 & 192 & 4 & 0.283 & 0.0018 & 0.00001 & 96 & 32 \\
+\#6 & 0.9395 & 192 & 4 & 0.242 & 0.0020 & 0.00002 & 96 & 64 \\
+\#7 & 0.9386 & 192 & 5 & 0.273 & 0.0021 & 0.00047 & 96 & 64 \\
+\#8 & 0.9386 & 192 & 4 & 0.231 & 0.0020 & 0.00050 & 96 & 64 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\section{Retained trials}
+
+\begin{table}[H]
+\centering
+\caption{The trial retained at each level by the 45-trial joint search. All three
+select a BiGRU.}
+\label{tab:app:sctrials}
+\small
+\begin{tabularx}{\textwidth}{@{}l c X@{}}
+\toprule
+\textbf{Level} & \textbf{CV R\textsuperscript{2}} & \textbf{Hyper-parameters} \\
+\midrule
+1 --- angles    & 0.9834 & $d=128$, 3 layers, dropout \num{0.042}, lr
+\num{0.0033}, wd \num{0.00039}, $W=64$, batch 32 \\
+\addlinespace
+2 --- 3D joints & 0.9549 & $d=192$, 2 layers, dropout \num{0.182}, lr
+\num{0.0014}, wd \num{4e-5}, $W=64$, batch 64 \\
+\addlinespace
+3 --- 2D keypoints & 0.9449 & $d=256$, 3 layers, dropout \num{0.222}, lr
+\num{0.0038}, wd \num{0.00016}, $W=128$, batch 64 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Read down the table, the search compensates for the degrading input in a
+consistent way: the model gets wider ($128\to192\to256$), the dropout rises
+($\num{0.042}\to\num{0.182}\to\num{0.222}$) and at the last level the temporal
+window doubles. Capacity and regularisation increase together, because the
+per-frame information is weaker and more context is needed to recover the same
+signal.

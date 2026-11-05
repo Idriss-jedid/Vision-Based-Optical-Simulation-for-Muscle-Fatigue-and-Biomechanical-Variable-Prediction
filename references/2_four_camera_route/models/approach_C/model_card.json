@@ -1,0 +1,13 @@
+{
+  "model": "LightGBM 2D keypoints (4 cams, FE+Optuna)",
+  "loso_mean_R2": 0.8595515189924985,
+  "hyperparams": {
+    "n_estimators": 594,
+    "num_leaves": 26,
+    "learning_rate": 0.04028042289911835,
+    "subsample": 0.6357214332823998,
+    "colsample_bytree": 0.5013184310228116,
+    "min_child_samples": 6
+  },
+  "n_features": 37
+}
