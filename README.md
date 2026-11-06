@@ -9,7 +9,8 @@
 </p>
 
 <p align="center">
-  <video src="https://idriss-jedid.github.io/Vision-Based-Optical-Simulation-for-Muscle-Fatigue-and-Biomechanical-Variable-Prediction/demo.mp4" controls width="860" poster="media/banner.gif"></video>
+  <a href="media/demo.mp4"><img src="media/demo.gif" width="900" alt="Demo: 2D pose estimation, 3D reconstruction, musculoskeletal simulation and real-time muscle signals"/></a>
+  <br/><b>Demo</b> · click for the full narrated demo
 </p>
 
 ## Abstract
